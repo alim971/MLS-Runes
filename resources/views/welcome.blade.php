@@ -10,16 +10,27 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <style>
+
         html, body .white {
-            background-color: #fff;
+            /*background-color: rgba(255, 255, 255, 0.88)!important;*/
             color: #636b6f;
         }
+        .white {
+            background-color: rgba(255, 255, 255, 0.88);
 
-        html, body {
+        }
+
+        select.white {
+            background-color: white;
+        }
+
+        html, body:not(.white) {
+            /*background-color: #191a1b; */
+            /*background-color: #242626;*/
             background-color: rgba(0, 0, 0, 0.69);
             /*color: #636b6f;*/
             color: #d2dbe0;
@@ -85,9 +96,13 @@
             border-width: 2px;
         }
 
-        input, select {
+        input, select:not(.white) {
             color: black;
             background: #d2dbe0;
+        }
+
+        input {
+            font-weight: 700;
         }
 
         input[number] {
@@ -96,30 +111,39 @@
             width: 40px;
         }
 
-        label.dark {
-            color: white;
+        label.white {
+            color: #d2dbe0;
         }
 
         label {
-            color: #d2dbe0;
             margin-left: 15px;
             margin-right: 15px;
         }
 
 
         .bigger {
-            font-size: 1.6rem;
+            font-size: 1.1em;
             font-weight: bold;
         }
 
         .bigger2 {
-            font-size: 1.8rem;
+            font-size: 1.2em;
             font-weight: bold;
         }
 
         .bigger3 {
-            font-size: 1.95rem;
+            font-size: 1.3em;
             font-weight: bold;
+        }
+
+        input[type=range] {
+            display: block;
+            width: 100%;
+        }
+
+        .mode {
+            float: right;
+            margin-right: 25px;
         }
     </style>
     <script>
@@ -146,16 +170,26 @@
 
         $(document).on('click', '#dark', function() {
             var dark = $(".white").length <= 0;
-            var allInputs = $( ":input" );
-            allInputs.forEach(input => dark ? input.addClass('white') : input.removeClass('white'));
             if(dark) {
-                $('#dark').innerText = 'Dark Mode';
+                $('#dark').html('Dark Mode');
+                $('#dark').removeClass('btn-white');
+                $('#dark').addClass('btn-dark');
             } else {
-                $('#dark').innerText = 'White Mode';
+                $('#dark').html('White Mode');
+                $('#dark').removeClass('btn-dark');
+                $('#dark').addClass('btn-white');
             }
             // for(var i = 0; i < allInputs.length; i++) {
-            //     if(dark) allInputs[i].addClass('white');
-            //     else allInputs[i].removeClass('white');
+            if(dark) {
+                $('input').addClass('white');
+                $('body').addClass('white');
+                $('select').addClass('white');
+            }
+            else {
+                $('input').removeClass('white');
+                $('body').removeClass('white');
+                $('select').removeClass('white');
+            }
             // }
         });
 
@@ -247,10 +281,11 @@
         <div class="title m-b-md">
             MLS - Runes
         </div>
-        <div style="float: right" id="dark">White mode</div>
         <label for="myForm">Select champion:</label>
 
         <div>
+            <button type="button" class="btn btn-white mode" id="dark">White mode</button>
+
             <select class="" id="mySelect">
                 <option value="Custom">Custom</option>
                 @foreach(\App\Champion::orderBy('name')->get() as $champion)
@@ -298,23 +333,25 @@
                 </div>
 
                 <br>
-                <br>
 
                 <div class="bigger2 collapse" id="minuteDiv">
                     <label for="minute">Minute of the game (1 - 70)</label>
                     <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="minute" id="minute"/>
                     <span class="">1 minute</span>
+                    <br>
+                    <br>
+
                 </div>
 
                 <div class="bigger2 collapse" id="lengthDiv">
                     <label for="time">Length of the game (1 - 70)</label>
                     <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="length" id="length"/>
                     <span class="">1 minute</span>
+                    <br>
+                    <br>
+
                 </div>
                 {{--                        </li>--}}
-                <br>
-                <br>
-                <br>
                 <div>
                     <label for="runeSelect">Select rune:</label>
                     <select id="runeSelect" class="" name="rune">
