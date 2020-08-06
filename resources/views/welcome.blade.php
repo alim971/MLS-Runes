@@ -34,6 +34,9 @@
             background-color: rgba(0, 0, 0, 0.69);
             /*color: #636b6f;*/
             color: #d2dbe0;
+        }
+
+        html, body:not(.white) {
             font-family: 'Nunito', sans-serif;
             font-weight: 200;
             height: 100vh;
