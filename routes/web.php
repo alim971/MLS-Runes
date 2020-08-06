@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/','HomeController')->name('home');
+
+Route::post('/select/', 'AjaxController@getStatsForChampion')->name('select');
+Route::post('/select/rune', 'AjaxController@getStatsForRune')->name('rune');
