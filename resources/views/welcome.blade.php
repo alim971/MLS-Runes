@@ -107,8 +107,8 @@
             //         f();
             //     }
             // });
-            // $(document).on('change mousemove', '#time', function() {
-            $(document).on('change', '#time', function() {
+            $(document).on('change mousemove', '#time', function() {
+            // $(document).on('change', '#time', function() {
                 var unit = $(this).val() === 1 ? 'second' : 'seconds';
                 $(this).next().html($(this).val() + unit);
                 f();
