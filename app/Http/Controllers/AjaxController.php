@@ -65,7 +65,7 @@ class AjaxController extends Controller
                 $dmg += $basic + $increase * $burst;
             }
         } else if($rune == 'ff') {
-            for($i = 0; $i < $length; $i++) {
+            for($i = 1; $i <= $length; $i++) {
                 $healBase += $i * 27;
             }
             for($i = 0; $i < $time; $i += 4) {
