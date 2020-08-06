@@ -14,7 +14,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <style>
-        html, body {
+        html, body .white {
+            background-color: #fff;
+            color: #636b6f;
+        }
+
+        html, body:not(.white) {
             background-color: rgba(0, 0, 0, 0.69);
             /*color: #636b6f;*/
             color: #d2dbe0;
@@ -56,6 +61,10 @@
             font-size: 84px;
         }
 
+        .title.while {
+            color: #636b6f;
+        }
+
         .links > a {
             color: #636b6f;
             padding: 0 25px;
@@ -85,6 +94,10 @@
             margin-left: 10px;
             height: 40px;
             width: 40px;
+        }
+
+        label.dark {
+            color: white;
         }
 
         label {
@@ -131,6 +144,26 @@
             f();
         });
 
+        $(document).on('click', '#dark', function() {
+            var dark = $(".white").length <= 0;
+            var allInputs = $( ":input" );
+            if(dark) {
+                $('#dark').innerText = 'Dark Mode';
+            } else {
+                $('#dark').innerText = 'White Mode';
+            }
+            // for(var i = 0; i < allInputs.length; i++) {
+                if(dark) {
+                    $('input').addClass('white');
+                    $('body').addClass('white');
+                }
+                else {
+                    $('input').removeClass('white');
+                    $('body').removeClass('white');
+                }
+            // }
+        });
+
         // var myDiv = document.getElementById("myDiv");
         $(document).on('change', '#mySelect', function() {
             $.ajaxSetup({
@@ -160,17 +193,29 @@
         });
         $(document).on('change', '#runeSelect', function() {
             if($(this).val() === 'ff') {
-                $('#minuteDiv').removeClass('collapse');
-                $('#lengthDiv').removeClass('collapse');
-                $('#ffDiv').removeClass('collapse');
+                uncollapseFF();
             } else {
-                $('#minuteDiv').addClass('collapse');
-                $('#lengthDiv').addClass('collapse');
-                $('#ffDiv').addClass('collapse');
+                collapseFF();
             }
             f();
             // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
         });
+
+        function collapseFF() {
+            $('#minuteDiv').addClass('collapse');
+            $('#lengthDiv').addClass('collapse');
+            $('#ffDiv').addClass('collapse');
+            $('#minute').val(1);
+            $('#length').val(1);
+        }
+
+        function uncollapseFF() {
+            $('#minuteDiv').removeClass('collapse');
+            $('#lengthDiv').removeClass('collapse');
+            $('#ffDiv').removeClass('collapse');
+            $('#minute').val(1);
+            $('#length').val(1);
+        }
 
         function f() {
             if($('#runeSelect').val() == null) {
@@ -207,6 +252,7 @@
         <div class="title m-b-md">
             MLS - Runes
         </div>
+        <div style="float: right" id="dark">White mode</div>
         <label for="myForm">Select champion:</label>
 
         <div>
