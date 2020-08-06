@@ -76,8 +76,8 @@
                 border-width: 2px;
             }
 
-            label, input {
-                color: #636b6f;
+            label, input, select {
+                color: black;
             }
 
             input[number] {
