@@ -10,6 +10,9 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <!-- Styles -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
         <style>
             html, body {
                 background-color: #fff;
@@ -61,39 +64,224 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            select {
+                height: 40px;
+                width: 45%;
+                border-width: 2px;
+            }
+
+            input[number] {
+                margin-left: 10px;
+                height: 40px;
+                width: 40px;
+            }
+
+            label {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+
+            .bigger {
+                font-size: 1.6rem;
+                font-weight: bold;
+            }
+
+            .bigger2 {
+                font-size: 1.8rem;
+                font-weight: bold;
+            }
+
+            .bigger2 {
+                font-size: 1.95rem;
+                font-weight: bold;
+            }
         </style>
+        <script>
+            $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
+        </script>
+        <script>
+            // $('#time').bind('change', function() {
+            //     $('#textInput').val($('#time').val());
+            //     if($('#runeSelect').val() != null) {
+            //         f();
+            //     }
+            // });
+            // $(document).on('change mousemove', '#time', function() {
+            $(document).on('change', '#time', function() {
+                var unit = $(this).val() === 1 ? 'second' : 'seconds';
+                $(this).next().html($(this).val() + unit);
+                f();
+            });
+
+            $(document).on('input', 'input[type=number]', function() {
+                f();
+            });
+
+            // var myDiv = document.getElementById("myDiv");
+            $(document).on('change', '#mySelect', function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': "{{csrf_token()}}"
+                    }
+                });
+
+                $.ajax({
+                    method: 'POST',
+                    url   : "{{ route('select') }}",
+                    data  : {
+                        id: $(this).val(),
+                    }
+                }).success(function (data) {
+                    $('#burst').val(data['burst']);
+                    $('#poke').val(data['poke']);
+                    $('#ba').val(data['basic']);
+                    $('#tank').val(data['tank']);
+                    $('#sustain').val(data['sustain']);
+                    $('#utility').val(data['utility']);
+                    $('#mobility').val(data['mobility']);
+                    $('#difficulty').val(data['difficulty']);
+                    f();
+                });
+                // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
+            });
+            $(document).on('change', '#runeSelect', function() {
+                f();
+                // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
+            });
+
+            function f() {
+                if($('#runeSelect').val() == null) {
+                    return;
+                }
+                var formData = new FormData(document.querySelector('form'));
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': "{{csrf_token()}}"
+                    }
+                });
+
+                $.ajax({
+                    method: 'POST',
+                    url   : "{{ route('rune') }}",
+                    data  : formData,
+                    processData: false,
+                    contentType: false
+                }).success(function (data) {
+                    $('#dmg').val(data['dmg']);
+                    $('#heal').val(data['heal']);
+                });
+            }
+        </script>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
+            @include('flash::message')
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
+            <div class="content bigger">
                 <div class="title m-b-md">
-                    Laravel
+                    MLS - Runes
                 </div>
+                <label for="myForm">Select champion:</label>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div>
+                    <select class="" id="mySelect">
+                        <option value="Custom">Custom</option>
+                        @foreach(\App\Champion::all() as $champion)
+                            <option value="{{ $champion->id }}">{{ $champion->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
+                <br>
+                <br>
+                <br>
+                <div>
+                    <form method="post" action="{{ route('rune') }}" id="myForm">
+                        <label for="burst">Burst</label>
+                        <input type="number" min="0" max="100" step="10" name="burst" id="burst"/>
+
+                        <label for="poke">Poke</label>
+                        <input type="number" min="0" max="100" step="10" name="poke" id="poke"/>
+
+                        <label for="ba">Basic attacks</label>
+                        <input type="number" min="0" max="100" step="10" name="ba" id="ba"/>
+
+                        <label for="tank">Tank</label>
+                        <input type="number" min="0" max="100" step="10" name="tank" id="tank"/>
+
+                        <label for="sustain">Sustain</label>
+                        <input type="number" min="0" max="100" step="10" name="sustain" id="sustain"/>
+
+                        <label for="utility">Utility</label>
+                        <input type="number" min="0" max="100" step="10" name="utility" id="utility"/>
+
+                        <label for="mobility">Mobility</label>
+                        <input type="number" min="0" max="100" step="10" name="mobility" id="mobility"/>
+
+                        <label for="difficulty">Difficulty</label>
+                        <input type="number" min="0" max="10" step="1" name="difficulty" id="difficulty"/>
+
+                        <br>
+                        <br>
+                        <br>
+{{--                        <li>--}}
+                        <div class="bigger2">
+                            <label for="time">Time in fight (1 - 100)</label>
+                            <input class="changeInput" type="range" min="1" max="100" value="1" step="1" name="time" id="time"/>
+                            <span class="">1 second</span>
+                        </div>
+{{--                        </li>--}}
+                        <br>
+                        <br>
+                        <br>
+                        <div>
+                            <label for="runeSelect">Select rune:</label>
+                            <select id="runeSelect" class="" name="rune">
+                                <option disabled selected value> -- select a rune -- </option>
+                                <option value="conq">Conqueror</option>
+                                <option value="lt">Lethal tempo</option>
+                                <option value="pta">Press the attack</option>
+                                <option value="hob">Hail of Blades</option>
+                            </select>
+                        </div>
+                    </form>
+                    <br>
+                    <br>
+                    <div class="bigger3">
+                        <label for="dmg">Damage done:</label>
+                        <input readonly disabled type="number" id="dmg" name="dmg"/>
+                        <label for="heal">Healing done:</label>
+                        <input readonly disabled type="number" id="heal" name="heal"/>
+                    </div>
+{{--                    <table id="myTable" style="visibility: collapse">--}}
+{{--                        <thead>--}}
+{{--                            <th>Name</th>--}}
+{{--                            <th>Burst</th>--}}
+{{--                            <th>Poke</th>--}}
+{{--                            <th>Basic attacks</th>--}}
+{{--                            <th>Tank</th>--}}
+{{--                            <th>Sustain</th>--}}
+{{--                            <th>Utility</th>--}}
+{{--                            <th>Mobility</th>--}}
+{{--                            <th>Difficulty</th>--}}
+{{--                        </thead>--}}
+{{--                        <tbody>--}}
+{{--                            <tr>--}}
+{{--                                <th></th>--}}
+{{--                                <th>Burst</th>--}}
+{{--                                <th>Poke</th>--}}
+{{--                                <th>Basic attacks</th>--}}
+{{--                                <th>Tank</th>--}}
+{{--                                <th>Sustain</th>--}}
+{{--                                <th>Utility</th>--}}
+{{--                                <th>Mobility</th>--}}
+{{--                                <th>Difficulty</th>--}}
+{{--                            </tr>--}}
+{{--                        </tbody>--}}
+{{--                    </table>--}}
+                </div>
+                <br>
             </div>
         </div>
     </body>
