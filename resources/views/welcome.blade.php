@@ -193,6 +193,8 @@
             }).success(function (data) {
                 $('#dmg').val(data['dmg']);
                 $('#heal').val(data['heal']);
+                $('#base').val(data['base']);
+                $('#fight').val(data['fight']);
             });
         }
     </script>
@@ -293,7 +295,7 @@
                 <input readonly disabled type="number" id="heal" name="heal"/>
                 <br>
                 <div id="ffDiv" class="collapse">
-                    <label for="base">Healing done during game:</label>
+                    <label for="base">Healing done outside fight:</label>
                     <input readonly disabled type="number" id="base" name="base"/>
                     <label for="fight">Healing done during fight:</label>
                     <input readonly disabled type="number" id="fight" name="fight"/>
