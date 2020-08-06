@@ -15,8 +15,9 @@
 
         <style>
             html, body {
-                background-color: #fff;
-                color: #636b6f;
+                background-color: rgba(0, 0, 0, 0.91);
+                /*color: #636b6f;*/
+                color: #d2dbe0;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
                 height: 100vh;
@@ -47,6 +48,10 @@
                 text-align: center;
             }
 
+            .collapse {
+                visibility: collapse;
+            }
+
             .title {
                 font-size: 84px;
             }
@@ -69,6 +74,10 @@
                 height: 40px;
                 width: 45%;
                 border-width: 2px;
+            }
+
+            label, input {
+                color: #636b6f;
             }
 
             input[number] {
@@ -107,9 +116,10 @@
             //         f();
             //     }
             // });
-            $(document).on('change mousemove', '#time', function() {
+            $(document).on('change mousemove', 'input[type=range]', function() {
             // $(document).on('change', '#time', function() {
-                var unit = $(this).val() === 1 ? 'second' : 'seconds';
+                var unit = $(this).attr('id') === 'time' ? 'second' : 'minute';
+                unit += $(this).val() === 1 ? '' : 's';
                 $(this).next().html($(this).val() + unit);
                 f();
             });
@@ -146,6 +156,15 @@
                 // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
             });
             $(document).on('change', '#runeSelect', function() {
+                if($(this).val() === 'ff') {
+                    $('#minuteDiv').removeClass('collapse');
+                    $('#lengthDiv').removeClass('collapse');
+                    $('#ffDiv').removeClass('collapse');
+                } else {
+                    $('#minuteDiv').addClass('collapse');
+                    $('#lengthDiv').addClass('collapse');
+                    $('#ffDiv').addClass('collapse');
+                }
                 f();
                 // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
             });
@@ -188,7 +207,7 @@
                 <div>
                     <select class="" id="mySelect">
                         <option value="Custom">Custom</option>
-                        @foreach(\App\Champion::all() as $champion)
+                        @foreach(\App\Champion::orderBy('name')->get() as $champion)
                             <option value="{{ $champion->id }}">{{ $champion->name }}</option>
                         @endforeach
                     </select>
@@ -231,6 +250,21 @@
                             <input class="changeInput" type="range" min="1" max="100" value="1" step="1" name="time" id="time"/>
                             <span class="">1 second</span>
                         </div>
+
+                        <br>
+                        <br>
+
+                        <div class="bigger2 collapse" id="minuteDiv">
+                            <label for="minute">Minute of the game (1 - 60)</label>
+                            <input class="changeInput" type="range" min="1" max="60" value="1" step="1" name="minute" id="minute"/>
+                            <span class="">1 minute</span>
+                        </div>
+
+                        <div class="bigger2 collapse" id="lengthDiv">
+                            <label for="time">Length of the game (1 - 60)</label>
+                            <input class="changeInput" type="range" min="1" max="100" value="1" step="1" name="length" id="length"/>
+                            <span class="">1 minute</span>
+                        </div>
 {{--                        </li>--}}
                         <br>
                         <br>
@@ -243,6 +277,7 @@
                                 <option value="lt">Lethal tempo</option>
                                 <option value="pta">Press the attack</option>
                                 <option value="hob">Hail of Blades</option>
+                                <option value="ff">Fleet Footwork</option>
                             </select>
                         </div>
                     </form>
@@ -253,6 +288,13 @@
                         <input readonly disabled type="number" id="dmg" name="dmg"/>
                         <label for="heal">Healing done:</label>
                         <input readonly disabled type="number" id="heal" name="heal"/>
+                        <br>
+                        <div id="ffDiv" class="collapse">
+                            <label for="base">Healing done during game:</label>
+                            <input readonly disabled type="number" id="base" name="base"/>
+                            <label for="fight">Healing done during fight:</label>
+                            <input readonly disabled type="number" id="fight" name="fight"/>
+                        </div>
                     </div>
 {{--                    <table id="myTable" style="visibility: collapse">--}}
 {{--                        <thead>--}}

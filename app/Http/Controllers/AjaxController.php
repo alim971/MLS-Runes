@@ -25,8 +25,16 @@ class AjaxController extends Controller
         $mobility = \request()->get('mobility');
         $difficulty = \request()->get('difficulty');
         $time = \request()->get('time');
+        $minute = \request()->get('minute');
+        $length = \request()->get('length');
+
         $dmg = 0;
         $heal = 0;
+
+        $healBase = 0;
+        $healFight = 0;
+        $data = [];
+
         if($rune == 'conq') {
             $increase = 0.1;
             $healing = 0.15;
@@ -56,8 +64,22 @@ class AjaxController extends Controller
             for($i = 0; $i < $time; $i++) {
                 $dmg += $basic + $increase * $burst;
             }
+        } else if($rune == 'ff') {
+            for($i = 0; $i < $length; $i++) {
+                $healBase += $i * 27;
+            }
+            for($i = 0; $i < $time; $i += 4) {
+                $healFight +=  $minute * 27;
+            }
+            $heal = $healBase + $healFight;
+            $data += [
+                'base' => $healBase,
+                'fight' => $healFight,
+            ];
+        } else {
+            flash('Not recognized rune')->error();
         }
-        $data = [
+        $data += [
             'dmg' => round($dmg,2),
             'heal' => round($heal, 2),
         ];
