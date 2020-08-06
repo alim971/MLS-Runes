@@ -15,10 +15,10 @@
 
     <style>
 
-        html, body .white {
-            /*background-color: rgba(255, 255, 255, 0.88)!important;*/
-            color: #636b6f;
-        }
+        /*html, body .white {*/
+        /*    !*background-color: rgba(255, 255, 255, 0.88)!important;*!*/
+        /*    color: #636b6f;*/
+        /*}*/
         .white {
             background-color: rgba(255, 255, 255, 0.88);
 
@@ -101,7 +101,7 @@
             background: #d2dbe0;
         }
 
-        input {
+        input, select {
             font-weight: 700;
         }
 
