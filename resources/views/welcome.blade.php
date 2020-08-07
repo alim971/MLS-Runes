@@ -518,7 +518,7 @@
                     <label for="bonus">Bonus Resistance at initiation:</label>
                     <input readonly disabled type="text" id="bonus" name="bonus"/>
                     <label for="afterAll">Total bonus resistance:</label>
-                    <input readonly disabled type="number" id="afterAll" name="afterAll"/>
+                    <input readonly disabled type="text" id="afterAll" name="afterAll"/>
                     <div class="collapse" style="text-align: left; margin-left: 15px">
                         <label for="after">Total Resistance at initiation:</label>
                         <input readonly disabled type="number" id="after" name="after"/>
