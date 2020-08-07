@@ -378,7 +378,7 @@
                 $('#base').val(data['base']);
                 $('#fight').val(data['fight']);
                 $('#after').val(data['after']);
-                $('#afterAll').val(data['afterAll']);
+                $('#afterAll').val(data['afterAll' + ' (up to ' + $('#number').val() + ' secs)']);
                 $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
             });
         }

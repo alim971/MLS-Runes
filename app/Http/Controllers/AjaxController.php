@@ -86,9 +86,9 @@ class AjaxController extends Controller
             }
 
             $data += [
-                'after' => $tank + $resist,
-                'afterAll' => $resistAll,
-                'bonus' => $resist
+                'after' => round($tank + $resist,2),
+                'afterAll' => round($resistAll,2),
+                'bonus' => round($resist,2)
             ];
         } else {
             flash('Not recognized rune')->error();
