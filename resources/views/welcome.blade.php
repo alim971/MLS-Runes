@@ -179,12 +179,15 @@
         // });
 
         $(document).on('change', '#checkChamps', function () {
-            if($(this).val()) {
+            if($(this).is(':checked')) {
                 $('#mySelect').addClass('collapse')
                 $('#roleSelect').removeClass('collapse');
+                $('#roleSelect option[value="' + $('#mySelect').val() + '"]').attr("selected", "selected");
             } else {
                 $('#mySelect').removeClass('collapse')
                 $('#roleSelect').addClass('collapse');
+                $('#mySelect option[value="' + $('#roleSelect').val() + '"]').attr("selected", "selected");
+
             }
         })
 
