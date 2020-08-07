@@ -10,6 +10,9 @@ class AjaxController extends Controller
 {
     public function getStatsForChampion() {
         $champion = Champion::find(\request()->get('id'));
+        if($champion == null) {
+            return response()->json(['message' => 'Custom'], 404);
+        }
         return Response::json($champion);
 //        return $champion->toJson();
     }
@@ -28,12 +31,30 @@ class AjaxController extends Controller
         $minute = \request()->get('minute');
         $length = \request()->get('length');
         $number = \request()->get('number');
+        $opponentTank = \request()->get('tankOpp');
+        $opponentUtility = \request()->get('utiOpp');
+        $opponentAfter = \request()->get('afOn') ? true : false;
+        $role = \request()->get('role');
 
         $dmg = 0;
         $heal = 0;
 
 
         $data = [];
+
+        if($role == 'Mage') {
+            for($i = 5; $i < $minute; $i+=5) {
+                $basic *= 1.15;
+                $burst *= 1.15;
+            }
+        } else if ($role == 'Carry') {
+
+        } else if($role == 'Marksman') {
+            for($i = 5; $i < $minute; $i+=5) {
+                $basic *= 1.15;
+                $basic += 25;
+            }
+        }
 
         if($rune == 'conq') {
             $increase = 0.1;
@@ -79,17 +100,27 @@ class AjaxController extends Controller
                 'fight' => $healFight,
             ];
         } else if($rune == 'af') {
-            $resist = $tank * (max($utility, 70)/100);
+            $resist = $tank * (min($utility, 70)/100);
             $resistAll = 0;
             for($i = 1; $i <= $number; $i++) {
                 $resistAll += $resist;
             }
 
             $data += [
-                'after' => $tank + $resist,
-                'afterAll' => $resistAll,
-                'bonus' => $resist
+                'after' => round($tank + $resist, 2),
+                'afterAll' => round($resistAll,2),
+                'bonus' => round($resist, 2)
             ];
+        } else if($rune == 'ele') {
+            $burstBonus = $burst * 0.75 + (20*$minute);
+            $opponentTank += $opponentTank * ($opponentAfter ? (min($opponentUtility, 70)/100) : 0);
+            $negate = $opponentTank * 0.1;
+            $data += [
+                'burst' => round($burstBonus, 2),
+                'negate' => round($negate,2),
+            ];
+        } else if($rune == 'dh') {
+
         } else {
             flash('Not recognized rune')->error();
         }

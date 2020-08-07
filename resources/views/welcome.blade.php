@@ -72,6 +72,7 @@
 
         .collapse {
             visibility: collapse;
+            display: none!important;
         }
 
         .btn {
@@ -248,10 +249,58 @@
                 $('#utility').val(data['utility']);
                 $('#mobility').val(data['mobility']);
                 $('#difficulty').val(data['difficulty']);
+                $('#role').val(data['role']);
+
+                if($('#role').val() == "" && !$('#minuteDiv').hasClass('collapse')) {
+                    $('#minuteDiv').addClass('collapse');
+                } else {
+                    $('#minuteDiv').removeClass('collapse');
+                }
+
+                f();
+            }).error(function (data) {
+                $('#burst').val(0);
+                $('#poke').val(0);
+                $('#ba').val(0);
+                $('#tank').val(0);
+                $('#sustain').val(0);
+                $('#utility').val(0);
+                $('#mobility').val(0);
+                $('#difficulty').val(0);
+                if(!$('#minuteDiv').hasClass('collapse')) {
+                    $('#minuteDiv').addClass('collapse');
+                }
+                }
+
+            );
+            // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
+        });
+
+        $(document).on('change', '#afOn', function() {
+            f();
+        });
+
+        $(document).on('change', '#opponentSelect', function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': "{{csrf_token()}}"
+                }
+            });
+
+            $.ajax({
+                method: 'POST',
+                url   : "{{ route('select') }}",
+                data  : {
+                    id: $(this).val(),
+                }
+            }).success(function (data) {
+                $('#tankOpp').val(data['tank']);
+                $('#utiOpp').val(data['utility']);
                 f();
             });
             // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
         });
+
         $(document).on('change', '#runeSelect', function() {
             var rune = $(this).val();
 
@@ -261,26 +310,37 @@
                     uncollapseHeal();
                     collapseFF();
                     collapseAf();
+                    collapseEle();
                     break;
                 case 'lt':
-                case 'hob':
                 case 'pta':
+                case 'hob':
                     uncollapseDmg();
                     collapseHeal();
                     collapseFF();
                     collapseAf();
+                    collapseEle();
+                    break;
+                case 'ele':
+                    collapseDmg();
+                    collapseHeal();
+                    collapseFF();
+                    collapseAf();
+                    uncollapseEle();
                     break;
                 case 'ff':
                     collapseDmg();
                     collapseHeal();
                     uncollapseFF();
                     collapseAf();
+                    collapseEle();
                     break;
                 case 'af':
                     collapseDmg();
                     collapseHeal();
                     collapseFF();
                     uncollapseAf();
+                    collapseEle();
                     break;
                 default:
                     break;
@@ -330,10 +390,12 @@
         }
 
         function collapseFF() {
-            if($('#minuteDiv').hasClass("collapse")) {
+            if($('#ffDiv').hasClass("collapse")) {
                 return;
             }
-            $('#minuteDiv').addClass('collapse');
+            if($('#role').val() == null) {
+                $('#minuteDiv').addClass('collapse');
+            }
             $('#lengthDiv').addClass('collapse');
             $('#ffDiv').addClass('collapse');
             $('#minute').val('1 minute');
@@ -365,6 +427,27 @@
 
         }
 
+        function collapseEle() {
+            if($('#eleDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#eleDiv').addClass('collapse');
+            $('#opponentDiv').addClass('collapse');
+            $('#timeDiv').removeClass('collapse');
+            // $('#minuteDiv').addClass('collapse');
+            $('#tankOpp').val(0);
+            $('#opponentSelect')[0].selectedIndex = 0
+        }
+
+        function uncollapseEle() {
+            $('#eleDiv').removeClass('collapse');
+            $('#opponentDiv').removeClass('collapse');
+            $('#timeDiv').addClass('collapse');
+            // $('#minuteDiv').removeClass('collapse');
+
+
+        }
+
         function f() {
             if($('#runeSelect').val() == null) {
                 return;
@@ -391,6 +474,10 @@
                 $('#after').val(data['after']);
                 $('#afterAll').val(data['afterAll']);
                 $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
+                $('#bonusBur').val(data['burst']);
+                $('#negate').val(data['negate']);
+
+
             });
         }
     </script>
@@ -439,29 +526,31 @@
         <br>
         <div class="getBorder">
             <form method="post" action="{{ route('rune') }}" id="myForm">
+                <label for="burst">Role</label>
+                <input type="text" maxlength="10" name="role" id="role">
                 <label for="burst">Burst</label>
-                <input type="number" min="0" max="100" step="10" name="burst" id="burst"/>
+                <input type="number" min="0" max="100" step="10" name="burst" value="0"  id="burst"/>
 
                 <label for="poke">Poke</label>
-                <input type="number" min="0" max="100" step="10" name="poke" id="poke"/>
+                <input type="number" min="0" max="100" step="10" name="poke" value="0" id="poke"/>
 
                 <label for="ba">Basic attacks</label>
-                <input type="number" min="0" max="100" step="10" name="ba" id="ba"/>
+                <input type="number" min="0" max="100" step="10" name="ba" value="0" id="ba"/>
 
                 <label for="tank">Tank</label>
-                <input type="number" min="0" max="100" step="10" name="tank" id="tank"/>
+                <input type="number" min="0" max="100" step="10" name="tank" value="0" id="tank"/>
 
                 <label for="sustain">Sustain</label>
-                <input type="number" min="0" max="100" step="10" name="sustain" id="sustain"/>
+                <input type="number" min="0" max="100" step="10" name="sustain" value="0" id="sustain"/>
 
                 <label for="utility">Utility</label>
-                <input type="number" min="0" max="100" step="10" name="utility" id="utility"/>
+                <input type="number" min="0" max="100" step="10" name="utility" value="0" id="utility"/>
 
                 <label for="mobility">Mobility</label>
-                <input type="number" min="0" max="100" step="10" name="mobility" id="mobility"/>
+                <input type="number" min="0" max="100" step="10" name="mobility" value="0" id="mobility"/>
 
                 <label for="difficulty">Difficulty</label>
-                <input type="number" min="0" max="100" step="10" name="difficulty" id="difficulty"/>
+                <input type="number" min="0" max="100" step="10" name="difficulty" value="0" id="difficulty"/>
 
                 <br>
                 <br>
@@ -501,6 +590,28 @@
                     <br>
 
                 </div>
+
+                <div id="opponentDiv" class="collapse">
+                    <label style="margin-right: 15px" for="opponent">Select your enemy</label>
+                    <select class="" id="opponentSelect" name="opponentSelect">
+                        <option value="Custom">Custom</option>
+                        @foreach($champions as $champion)
+                            <option value="{{ $champion->id }}">{{ $champion->name }}</option>
+                        @endforeach
+                    </select>
+                    <input type="checkbox" name="afOn" id="afOn">
+                    <label for="afOn">Aftershock</label>
+
+                    <br>
+                    <label for="tankOpp">Tank</label>
+                    <input type="number" min="0" max="100" step="10" value="0" name="tankOpp" id="tankOpp"/>
+                    <label for="tankOpp">Utility</label>
+                    <input type="number" min="0" max="100" step="10" value="0" name="utiOpp" id="utiOpp"/>
+                    <br>
+                    <br>
+
+                </div>
+
                 {{--                        </li>--}}
                 <div>
                     <label for="runeSelect">Select rune:</label>
@@ -514,6 +625,8 @@
                         </optgroup>
                         <optgroup label="Domination">
                             <option value="hob">Hail of Blades</option>
+                            <option value="ele">Electrocute</option>
+                            <option value="dh">Dark Harvest</option>
                         </optgroup>
                         <optgroup label="Resolve">
                             <option value="af">Aftershock</option>
@@ -553,6 +666,15 @@
                         <label for="after">Total Resistance at initiation:</label>
                         <input readonly disabled type="number" id="after" name="after"/>
                     </div>
+                </div>
+                <div class="collapse" id="eleDiv">
+                    <label for="bonusBur">Bonus Burst at initiation:</label>
+                    <input readonly disabled type="text" id="bonusBur" name="bonusBur"/>
+                    <div id="negateDiv" style="display: inline">
+                        <label for="negate">Resistance negated:</label>
+                        <input readonly disabled type="number" id="negate" value="0" name="negate"/>
+                    </div>
+
                 </div>
             </div>
 
