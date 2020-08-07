@@ -12,9 +12,12 @@ class ChampionsImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $rows)
     {
+        $data = [];
+        $index = 0;
         foreach ($rows as $csvLine)
         {
-            Champion::updateOrCreate([
+
+            $data[$index++] = [
                 'name' => $csvLine->get('name'),
                 'burst' => $csvLine->get('burst'),
                 'poke' => $csvLine->get('poke'),
@@ -24,7 +27,9 @@ class ChampionsImport implements ToCollection, WithHeadingRow
                 'utility' => $csvLine->get('utility'),
                 'mobility' => $csvLine->get('mobility'),
                 'difficulty' => $csvLine->get('difficulty'),
-            ]);
+            ];
         }
+        Champion::insertOnDuplicateKey($data);
+
     }
 }
