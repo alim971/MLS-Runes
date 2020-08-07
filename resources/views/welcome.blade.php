@@ -432,7 +432,7 @@
                 <input type="number" min="0" max="100" step="10" name="mobility" id="mobility"/>
 
                 <label for="difficulty">Difficulty</label>
-                <input type="number" min="0" max="10" step="1" name="difficulty" id="difficulty"/>
+                <input type="number" min="0" max="100" step="10" name="difficulty" id="difficulty"/>
 
                 <br>
                 <br>
