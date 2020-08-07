@@ -27,22 +27,6 @@ class ChampionService
 
             Excel::import(new ChampionsImport, public_path() . '/tmp/characters.csv');
 
-//            Excel::load('characters.csv')->each(function (Collection $csvLine) {
-//
-//                Champion::updateOrCreate([
-//                    'name' => $csvLine->get('Name'),
-//                    'burst' => $csvLine->get('Burst'),
-//                    'poke' => $csvLine->get('Poke'),
-//                    'basic' => $csvLine->get('Basic Attacks'),
-//                    'tank' => $csvLine->get('Tank'),
-//                    'sustain' => $csvLine->get('Sustain'),
-//                    'utility' => $csvLine->get('Utility'),
-//                    'mobility' => $csvLine->get('Mobility'),
-//                    'difficulty' => $csvLine->get('Difficulty'),
-//                ]);
-//
-//            });
-
             $this->deleteTmpCsvFile();
             DB::commit();
             return true;
@@ -71,6 +55,9 @@ class ChampionService
         $url = 'https://raw.githubusercontent.com/TheBlocks/MyLeagueSim-Data/master/champ_stats/';
         $version = $this->getNewestVersion();
         $response = Http::get($url . $version);
+        if($response->failed()) {
+            throw new \Exception();
+        }
         return $response->body();
     }
 
