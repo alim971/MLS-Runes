@@ -389,8 +389,6 @@
 
     <div class="content bigger">
         @include('flash::message')
-
-    <div class="content bigger">
         <div class="title m-b-md">
             MLS - Runes
         </div>
@@ -528,33 +526,6 @@
                 </div>
             </div>
 
-            {{--                    <table id="myTable" style="visibility: collapse">--}}
-            {{--                        <thead>--}}
-            {{--                            <th>Name</th>--}}
-            {{--                            <th>Burst</th>--}}
-            {{--                            <th>Poke</th>--}}
-            {{--                            <th>Basic attacks</th>--}}
-            {{--                            <th>Tank</th>--}}
-            {{--                            <th>Sustain</th>--}}
-            {{--                            <th>Utility</th>--}}
-            {{--                            <th>Mobility</th>--}}
-            {{--                            <th>Difficulty</th>--}}
-            {{--                        </thead>--}}
-            {{--                        <tbody>--}}
-            {{--                            <tr>--}}
-            {{--                                <th></th>--}}
-            {{--                                <th>Burst</th>--}}
-            {{--                                <th>Poke</th>--}}
-            {{--                                <th>Basic attacks</th>--}}
-            {{--                                <th>Tank</th>--}}
-            {{--                                <th>Sustain</th>--}}
-            {{--                                <th>Utility</th>--}}
-            {{--                                <th>Mobility</th>--}}
-            {{--                                <th>Difficulty</th>--}}
-            {{--                            </tr>--}}
-            {{--                        </tbody>--}}
-            {{--                    </table>--}}
-{{--        </div>--}}
         <br>
     </div>
 </div>
