@@ -79,7 +79,7 @@ class AjaxController extends Controller
                 'fight' => $healFight,
             ];
         } else if($rune == 'af') {
-            $resist = $tank * (max($utility, 70)/100);
+            $resist = $tank * (min($utility, 70)/100);
             $resistAll = 0;
             for($i = 1; $i <= $number; $i++) {
                 $resistAll += $resist;
