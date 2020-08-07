@@ -71,6 +71,10 @@
             visibility: collapse;
         }
 
+        .btn {
+            width: 112px;
+        }
+
         .title {
             font-size: 84px;
         }
@@ -148,6 +152,19 @@
             float: right;
             margin-right: 25px;
         }
+
+        .inline {
+            display: inline;
+        }
+
+        .inline-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .getBorder {
+
+        }
     </style>
     <script>
         $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
@@ -161,8 +178,9 @@
         // });
         $(document).on('change mousemove', 'input[type=range]', function() {
             // $(document).on('change', '#time', function() {
-            var unit = $(this).attr('id') === 'time' ? ' second' : ' minute';
-            unit += $(this).val() === 1 ? '' : 's';
+            var id = $(this).attr('id');
+            var unit = id === 'time' ? ' second' : id === 'number' ? ' fight' : ' minute';
+            unit += $(this).val() == 1 ? '' : 's';
             $(this).next().html($(this).val() + unit);
             f();
         });
@@ -224,29 +242,116 @@
             // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
         });
         $(document).on('change', '#runeSelect', function() {
-            if($(this).val() === 'ff') {
-                uncollapseFF();
+            var rune = $(this).val();
+
+            switch(rune) {
+                case 'conq':
+                    uncollapseDmg();
+                    uncollapseHeal();
+                    collapseFF();
+                    collapseAf();
+                    break;
+                case 'lt':
+                case 'hob':
+                case 'pta':
+                    uncollapseDmg();
+                    collapseHeal();
+                    collapseFF();
+                    collapseAf();
+                    break;
+                case 'ff':
+                    collapseDmg();
+                    collapseHeal();
+                    uncollapseFF();
+                    collapseAf();
+                    break;
+                case 'af':
+                    collapseDmg();
+                    collapseHeal();
+                    collapseFF();
+                    uncollapseAf();
+                    break;
+                default:
+                    break;
+                // code block
+            }
+
+            if(rune === 'conq') {
+            } else if(rune === 'c') {
+            } else if(rune === 'pta') {
+            } else if(rune === 'hob') {
+            } else if(rune === 'ff') {
+            } else if(rune === 'af') {
             } else {
+            }
+
+            if(rune === 'ff') {
+                uncollapseFF();
+            } else if(rune === 'af') {
                 collapseFF();
             }
             f();
             // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
         });
 
+        function collapseDmg() {
+            if($('#dmgDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#dmgDiv').addClass('collapse');
+            $('#dmg').val(0);
+        }
+
+        function uncollapseDmg() {
+            $('#dmgDiv').removeClass('collapse');
+        }
+
+        function collapseHeal() {
+            if($('#healDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#healDiv').addClass('collapse');
+            $('#heal').val(0);
+        }
+
+        function uncollapseHeal() {
+            $('#healDiv').removeClass('collapse');
+        }
+
         function collapseFF() {
+            if($('#minuteDiv').hasClass("collapse")) {
+                return;
+            }
             $('#minuteDiv').addClass('collapse');
             $('#lengthDiv').addClass('collapse');
             $('#ffDiv').addClass('collapse');
-            $('#minute').val(1);
-            $('#length').val(1);
+            $('#minute').val('1 minute');
+            $('#length').val('1 minute');
         }
 
         function uncollapseFF() {
             $('#minuteDiv').removeClass('collapse');
             $('#lengthDiv').removeClass('collapse');
             $('#ffDiv').removeClass('collapse');
-            $('#minute').val(1);
-            $('#length').val(1);
+            // $('#minute').val(1);
+            // $('#length').val(1);
+        }
+
+        function collapseAf() {
+            if($('#afterDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#afterDiv').addClass('collapse');
+            $('#numberDiv').addClass('collapse');
+            $('#timeDiv').removeClass('collapse');
+            $('#number').val('1 fight');
+        }
+
+        function uncollapseAf() {
+            $('#afterDiv').removeClass('collapse');
+            $('#numberDiv').removeClass('collapse');
+            $('#timeDiv').addClass('collapse');
+
         }
 
         function f() {
@@ -272,6 +377,9 @@
                 $('#heal').val(data['heal']);
                 $('#base').val(data['base']);
                 $('#fight').val(data['fight']);
+                $('#after').val(data['after']);
+                $('#afterAll').val(data['afterAll']);
+                $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
             });
         }
     </script>
@@ -299,7 +407,7 @@
         <br>
         <br>
         <br>
-        <div>
+        <div class="getBorder">
             <form method="post" action="{{ route('rune') }}" id="myForm">
                 <label for="burst">Burst</label>
                 <input type="number" min="0" max="100" step="10" name="burst" id="burst"/>
@@ -329,7 +437,7 @@
                 <br>
                 <br>
                 {{--                        <li>--}}
-                <div class="bigger2">
+                <div class="bigger2" id="timeDiv">
                     <label for="time">Time in fight (1 - 100)</label>
                     <input class="changeInput" type="range" min="1" max="100" value="1" step="1" name="time" id="time"/>
                     <span class="">1 second</span>
@@ -347,9 +455,18 @@
                 </div>
 
                 <div class="bigger2 collapse" id="lengthDiv">
-                    <label for="time">Length of the game (1 - 70)</label>
+                    <label for="length">Length of the game (1 - 70)</label>
                     <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="length" id="length"/>
                     <span class="">1 minute</span>
+                    <br>
+                    <br>
+
+                </div>
+
+                <div class="bigger2 collapse" id="numberDiv">
+                    <label for="number">Number of fights in a game (1 - 100)</label>
+                    <input class="changeInput" type="range" min="1" max="100" value="1" step="1" name="number" id="number"/>
+                    <span class="">1 fight</span>
                     <br>
                     <br>
 
@@ -359,29 +476,56 @@
                     <label for="runeSelect">Select rune:</label>
                     <select id="runeSelect" class="" name="rune">
                         <option disabled selected value> -- select a rune -- </option>
-                        <option value="conq">Conqueror</option>
-                        <option value="lt">Lethal tempo</option>
-                        <option value="pta">Press the attack</option>
-                        <option value="hob">Hail of Blades</option>
-                        <option value="ff">Fleet Footwork</option>
+                        <optgroup label="Precision">
+                            <option value="conq">Conqueror</option>
+                            <option value="ff">Fleet Footwork</option>
+                            <option value="lt">Lethal tempo</option>
+                            <option value="pta">Press the attack</option>
+                        </optgroup>
+                        <optgroup label="Domination">
+                            <option value="hob">Hail of Blades</option>
+                        </optgroup>
+                        <optgroup label="Resolve">
+                            <option value="af">Aftershock</option>
+                        </optgroup>
                     </select>
                 </div>
             </form>
             <br>
             <br>
-            <div class="bigger3">
-                <label for="dmg">Damage done:</label>
-                <input readonly disabled type="number" id="dmg" name="dmg"/>
-                <label for="heal">Healing done:</label>
-                <input readonly disabled type="number" id="heal" name="heal"/>
-                <br>
+        </div>
+            <div class="bigger3 getBorder">
+                <div class="inline-container">
+                    <div class="inline collapse" id="dmgDiv">
+                        <label for="dmg">Damage done:</label>
+                        <input readonly disabled type="number" id="dmg" name="dmg"/>
+                        <br>
+                    </div>
+                    <div class="inline collapse" id="healDiv">
+                        <label for="heal">Healing done:</label>
+                        <input readonly disabled type="number" id="heal" name="heal"/>
+                        <br>
+                    </div>
+                </div>
+
                 <div id="ffDiv" class="collapse">
                     <label for="base">Healing done outside fight:</label>
                     <input readonly disabled type="number" id="base" name="base"/>
                     <label for="fight">Healing done during fight:</label>
                     <input readonly disabled type="number" id="fight" name="fight"/>
                 </div>
+                <div class="collapse" id="afterDiv">
+                    <label for="bonus">Bonus Resistance at initiation:</label>
+                    <input readonly disabled type="text" id="bonus" name="bonus"/>
+                    <label for="afterAll">Total bonus resistance:</label>
+                    <input readonly disabled type="number" id="afterAll" name="afterAll"/>
+                    <div class="collapse" style="text-align: left; margin-left: 15px">
+                        <label for="after">Total Resistance at initiation:</label>
+                        <input readonly disabled type="number" id="after" name="after"/>
+                    </div>
+                </div>
             </div>
+
             {{--                    <table id="myTable" style="visibility: collapse">--}}
             {{--                        <thead>--}}
             {{--                            <th>Name</th>--}}
@@ -408,7 +552,7 @@
             {{--                            </tr>--}}
             {{--                        </tbody>--}}
             {{--                    </table>--}}
-        </div>
+{{--        </div>--}}
         <br>
     </div>
 </div>
