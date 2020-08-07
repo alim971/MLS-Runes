@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
     <style>
 
         /*html, body .white {*/
@@ -166,9 +169,6 @@
 
         }
     </style>
-    <script>
-        $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
-    </script>
     <script>
         // $('#time').bind('change', function() {
         //     $('#textInput').val($('#time').val());
@@ -386,9 +386,10 @@
 </head>
 <body>
 <div class="flex-center position-ref full-height">
-    @include('flash::message')
 
     <div class="content bigger">
+        @include('flash::message')
+
         <div class="title m-b-md">
             MLS - Runes
         </div>
@@ -556,5 +557,8 @@
         <br>
     </div>
 </div>
+<script>
+    $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
+</script>
 </body>
 </html>

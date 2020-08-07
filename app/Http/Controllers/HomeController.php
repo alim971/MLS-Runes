@@ -20,6 +20,10 @@ class HomeController extends Controller
     public function __invoke(Request $request, ChampionService $championService)
     {
         //
+        if (!$request->secure() && !$this->app->environment('local')) {
+            flash()->error('You are accessing the page via unsecure HTTP. The site will not work for you, unless
+             you use HTTPS.')->important();
+        }
         if(!$championService->getChampions()) {
             flash()->error('Error loading newest data');
         }
