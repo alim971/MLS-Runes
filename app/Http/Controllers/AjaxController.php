@@ -27,12 +27,12 @@ class AjaxController extends Controller
         $time = \request()->get('time');
         $minute = \request()->get('minute');
         $length = \request()->get('length');
+        $number = \request()->get('number');
 
         $dmg = 0;
         $heal = 0;
 
-        $healBase = 0;
-        $healFight = 0;
+
         $data = [];
 
         if($rune == 'conq') {
@@ -65,6 +65,8 @@ class AjaxController extends Controller
                 $dmg += $basic + $increase * $burst;
             }
         } else if($rune == 'ff') {
+            $healBase = 0;
+            $healFight = 0;
             for($i = 1; $i <= $length; $i++) {
                 $healBase += $i * 27;
             }
@@ -75,6 +77,18 @@ class AjaxController extends Controller
             $data += [
                 'base' => $healBase,
                 'fight' => $healFight,
+            ];
+        } else if($rune == 'af') {
+            $resist = $tank * (max($utility, 70)/100);
+            $resistAll = 0;
+            for($i = 1; $i <= $number; $i++) {
+                $resistAll += $resist;
+            }
+
+            $data += [
+                'after' => $tank + $resist,
+                'afterAll' => $resistAll,
+                'bonus' => $resist
             ];
         } else {
             flash('Not recognized rune')->error();
