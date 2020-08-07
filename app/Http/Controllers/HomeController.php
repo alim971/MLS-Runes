@@ -25,9 +25,13 @@ class HomeController extends Controller
             flash()->error('You are accessing the page via unsecure HTTP. The site will not work for you, unless
              you use HTTPS.')->important();
         }
-        if(!$championService->getChampions()) {
+        if(!$championService->loadChampions()) {
             flash()->error('Error loading newest data');
         }
-        return view('welcome');
+
+        $champions = $championService->getChampionsAlphabetically();
+        $roles = $championService->getRoles()->pluck('role');
+
+        return view('welcome', ['champions' => $champions ,'roles' => $roles]);
     }
 }

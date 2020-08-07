@@ -176,6 +176,17 @@
         //         f();
         //     }
         // });
+
+        $(document).on('change', '#checkChamps', function () {
+            if($(this).val()) {
+                $('#mySelect').addClass('collapse')
+                $('#roleSelect').removeClass('collapse');
+            } else {
+                $('#mySelect').removeClass('collapse')
+                $('#roleSelect').addClass('collapse');
+            }
+        })
+
         $(document).on('change mousemove', 'input[type=range]', function() {
             // $(document).on('change', '#time', function() {
             var id = $(this).attr('id');
@@ -215,7 +226,7 @@
         });
 
         // var myDiv = document.getElementById("myDiv");
-        $(document).on('change', '#mySelect', function() {
+        $(document).on('change', '.champSelect', function() {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': "{{csrf_token()}}"
@@ -398,12 +409,30 @@
         <div>
             <button type="button" class="btn btn-white mode" id="dark">White mode</button>
 
-            <select class="" id="mySelect">
+            <select class="champSelect" id="mySelect">
                 <option value="Custom">Custom</option>
-                @foreach(\App\Champion::orderBy('name')->get() as $champion)
+                @foreach($champions as $champion)
                     <option value="{{ $champion->id }}">{{ $champion->name }}</option>
                 @endforeach
             </select>
+
+            <select class="champSelect collapse" id="roleSelect">
+                <option value="Custom">Custom</option>
+                @foreach($roles as $role)
+                    @php
+                    $champs = \App\Champion::where('role', $role)->get()
+                    @endphp
+                    <optgroup label="{{ $role ?? 'Others' }}">
+                        @foreach($champs as $champion)
+                            <option value="{{ $champion->id }}">{{ $champion->name }}</option>
+                        @endforeach
+                    </optgroup>
+                @endforeach
+            </select>
+            <div>
+                <input type="checkbox" id="checkChamps">
+                <label for="checkChamps">Sort champions by role</label>
+            </div>
         </div>
         <br>
         <br>
