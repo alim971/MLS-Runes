@@ -194,7 +194,23 @@
         $(document).on('change mousemove', 'input[type=range]', function() {
             // $(document).on('change', '#time', function() {
             var id = $(this).attr('id');
-            var unit = id === 'time' ? ' second' : id === 'number' ? ' fight' : ' minute';
+            var unit;
+            switch (id) {
+                case 'time':
+                    unit = ' second';
+                    break;
+                case 'length':
+                case 'minute':
+                case 'reached':
+                    unit = ' minute';
+                    break;
+                case 'number':
+                    unit = ' fight';
+                    break;
+                case 'shutdown':
+                    unit = ' shutdown'
+            }
+            // var unit = id === 'time' ? ' second' : id === 'number' ? ' fight' : id ===  ' minute';
             unit += $(this).val() == 1 ? '' : 's';
             $(this).next().html($(this).val() + unit);
             f();
@@ -254,14 +270,30 @@
                 $('#difficulty').val(data['difficulty']);
                 $('#role').val(data['role']);
 
-                if($('#role').val() == "" && !$('#minuteDiv').hasClass('collapse')) {
-                    $('#minuteDiv').addClass('collapse');
+                if($('#role').val() == "") {
+                    if(!$('#minuteDiv').hasClass('collapse'))
+                        $('#minuteDiv').addClass('collapse');
                 } else {
                     $('#minuteDiv').removeClass('collapse');
                 }
 
+                if($('#role').val() == "Carry"){
+                    $('#reachedDiv').removeClass('collapse');
+                } else if($('#role').val() != "Carry") {
+                    if(!$('#reachedDiv').hasClass('collapse'))
+                        $('#reachedDiv').addClass('collapse');
+                }
+
+                if($('#role').val() == "Enchanter"){
+                    $('#shieldDiv').removeClass('collapse');
+                } else if($('#role').val() != "Enchanter") {
+                    if(!$('#shieldDiv').hasClass('collapse'))
+                        $('#shieldDiv').addClass('collapse');
+                }
+
                 f();
             }).error(function (data) {
+                $('#role').val("");
                 $('#burst').val(0);
                 $('#poke').val(0);
                 $('#ba').val(0);
@@ -273,6 +305,11 @@
                 if(!$('#minuteDiv').hasClass('collapse')) {
                     $('#minuteDiv').addClass('collapse');
                 }
+
+                if(!$('#reachedDiv').hasClass('collapse')) {
+                    $('#reachedDiv').addClass('collapse');
+                }
+
                 }
 
             );
@@ -314,6 +351,17 @@
                     collapseFF();
                     collapseAf();
                     collapseEle();
+                    collapseDh();
+                    collapseGu();
+                    break;
+                case 'ff':
+                    collapseDmg();
+                    collapseHeal();
+                    uncollapseFF();
+                    collapseAf();
+                    collapseEle();
+                    collapseDh();
+                    collapseGu();
                     break;
                 case 'lt':
                 case 'pta':
@@ -323,6 +371,8 @@
                     collapseFF();
                     collapseAf();
                     collapseEle();
+                    collapseDh();
+                    collapseGu();
                     break;
                 case 'ele':
                     collapseDmg();
@@ -330,13 +380,17 @@
                     collapseFF();
                     collapseAf();
                     uncollapseEle();
+                    collapseDh();
+                    collapseGu();
                     break;
-                case 'ff':
+                case 'dh':
                     collapseDmg();
                     collapseHeal();
-                    uncollapseFF();
+                    collapseFF();
                     collapseAf();
                     collapseEle();
+                    uncollapseDh();
+                    collapseGu();
                     break;
                 case 'af':
                     collapseDmg();
@@ -344,25 +398,21 @@
                     collapseFF();
                     uncollapseAf();
                     collapseEle();
+                    collapseDh();
+                    collapseGu();
+                    break;
+                case 'gu':
+                    collapseDmg();
+                    collapseHeal();
+                    collapseFF();
+                    collapseAf();
+                    collapseEle();
+                    collapseDh();
+                    uncollapseGu();
                     break;
                 default:
                     break;
                 // code block
-            }
-
-            if(rune === 'conq') {
-            } else if(rune === 'c') {
-            } else if(rune === 'pta') {
-            } else if(rune === 'hob') {
-            } else if(rune === 'ff') {
-            } else if(rune === 'af') {
-            } else {
-            }
-
-            if(rune === 'ff') {
-                uncollapseFF();
-            } else if(rune === 'af') {
-                collapseFF();
             }
             f();
             // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
@@ -396,13 +446,13 @@
             if($('#ffDiv').hasClass("collapse")) {
                 return;
             }
-            if($('#role').val() == null) {
+            if($('#role').val() == "") {
                 $('#minuteDiv').addClass('collapse');
             }
             $('#lengthDiv').addClass('collapse');
             $('#ffDiv').addClass('collapse');
-            $('#minute').val('1 minute');
-            $('#length').val('1 minute');
+            // $('#minute').val('1 minute');
+            // $('#length').val('1 minute');
         }
 
         function uncollapseFF() {
@@ -437,7 +487,6 @@
             $('#eleDiv').addClass('collapse');
             $('#opponentDiv').addClass('collapse');
             $('#timeDiv').removeClass('collapse');
-            // $('#minuteDiv').addClass('collapse');
             $('#tankOpp').val(0);
             $('#opponentSelect')[0].selectedIndex = 0
         }
@@ -446,9 +495,38 @@
             $('#eleDiv').removeClass('collapse');
             $('#opponentDiv').removeClass('collapse');
             $('#timeDiv').addClass('collapse');
-            // $('#minuteDiv').removeClass('collapse');
 
+        }
 
+        function collapseDh() {
+            if($('#dhDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#dhDiv').addClass('collapse');
+            $('#shutdownDiv').addClass('collapse');
+            $('#shutdown').val('0 shutdowns');
+            $('#timeDiv').removeClass('collapse');
+
+        }
+
+        function uncollapseDh() {
+            $('#dhDiv').removeClass('collapse');
+            $('#shutdownDiv').removeClass('collapse');
+            $('#timeDiv').addClass('collapse');
+        }
+
+        function collapseGu() {
+            if($('#guardianDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#guardianDiv').addClass('collapse');
+            $('#bonusShield').val(0);
+
+        }
+
+        function uncollapseGu() {
+            //$('#role').val() == "Enchanter"
+            $('#guardianDiv').removeClass('collapse');
         }
 
         function f() {
@@ -477,8 +555,28 @@
                 $('#after').val(data['after']);
                 $('#afterAll').val(data['afterAll']);
                 $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
-                $('#bonusBur').val(data['burst']);
+                $('#bonusBur').val(data['burst'] + ' (' + data['burstTotal'] + ' total)');
                 $('#negate').val(data['negate']);
+                var bonus, total, bonusLabel, totalLabel;
+                if(data['min']) {
+                    bonusLabel = 'Bonus burst in range of: ';
+                    totalLabel = 'Total burst in range of: ';
+                    bonus = data['bonusBurstMin'] + ' - ' + data['bonusBurstMax'];
+                    total = data['burstTotalMin'] + ' - ' + data['burstTotalMax'];
+                } else {
+                    bonusLabel = 'Bonus burst: ';
+                    totalLabel = 'Total burst: ';
+                    bonus = data['bonusBurstMax'];
+                    total = data['burstTotalMax'];
+                }
+                $('label[for=bonusBurDh]').html(bonusLabel);
+                $('label[for=totalBurDh]').html(totalLabel);
+                $('#bonusBurDh').val(bonus);
+                $('#totalBurDh').val(total);
+
+                $('#shield').val(data['shield']);
+                $('#bonusShield').val(data['bonusShield'] + ' (' + data['totalShield'] + ' total)');
+
 
 
             });
@@ -507,7 +605,9 @@
             </select>
 
             <select class="champSelect collapse" id="roleSelect">
-                <option value="Custom">Custom</option>
+                <optgroup label="Custom values">
+                    <option value="Custom">Custom</option>
+                </optgroup>
                 @foreach($roles as $role)
                     @php
                     $champs = \App\Champion::where('role', $role)->get()
@@ -567,6 +667,15 @@
 
                 <br>
 
+                <div class="bigger2 collapse" id="reachedDiv">
+                    <label for="reached">Minute when carry reached 9k gold (1 - 70)</label>
+                    <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="reached" id="reached"/>
+                    <span class="">1 minute</span>
+                    <br>
+                    <br>
+
+                </div>
+
                 <div class="bigger2 collapse" id="minuteDiv">
                     <label for="minute">Minute of the game (1 - 70)</label>
                     <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="minute" id="minute"/>
@@ -594,8 +703,17 @@
 
                 </div>
 
+                <div class="bigger2 collapse" id="shutdownDiv">
+                    <label for="shutdown">Number of kills and assists (0 - 50)</label>
+                    <input class="changeInput" type="range" min="0" max="50" value="0" step="1" name="shutdown" id="shutdown"/>
+                    <span class="">0 shutdowns</span>
+                    <br>
+                    <br>
+
+                </div>
+
                 <div id="opponentDiv" class="collapse">
-                    <label style="margin-right: 15px" for="opponent">Select your enemy</label>
+                    <label style="margin-right: 15px" for="opponentSelect">Select your enemy</label>
                     <select class="" id="opponentSelect" name="opponentSelect">
                         <option value="Custom">Custom</option>
                         @foreach($champions as $champion)
@@ -608,7 +726,7 @@
                     <br>
                     <label for="tankOpp">Tank</label>
                     <input type="number" min="0" max="100" step="10" value="0" name="tankOpp" id="tankOpp"/>
-                    <label for="tankOpp">Utility</label>
+                    <label for="utiOpp">Utility</label>
                     <input type="number" min="0" max="100" step="10" value="0" name="utiOpp" id="utiOpp"/>
                     <br>
                     <br>
@@ -629,10 +747,11 @@
                         <optgroup label="Domination">
                             <option value="hob">Hail of Blades</option>
                             <option value="ele">Electrocute</option>
-{{--                            <option value="dh">Dark Harvest</option>--}}
+                            <option value="dh">Dark Harvest</option>
                         </optgroup>
                         <optgroup label="Resolve">
                             <option value="af">Aftershock</option>
+                            <option value="gu">Guardian (Enchanters only)</option>
                         </optgroup>
                     </select>
                 </div>
@@ -677,7 +796,22 @@
                         <label for="negate">Resistance negated:</label>
                         <input readonly disabled type="number" id="negate" value="0" name="negate"/>
                     </div>
-
+                </div>
+                <div class="collapse" id="dhDiv">
+                    <label for="bonusBurDh">Bonus Burst:</label>
+                    <input readonly disabled type="text" id="bonusBurDh" name="bonusBurDh"/>
+                    <label for="totalBurDh">Total burst:</label>
+                    <input readonly disabled type="text" id="totalBurDh" value="0" name="totalBurDh"/>
+                </div>
+                <div class="collapse" id="shieldDiv">
+                    <br>
+                    <label for="dmg">Shield when ally is damaged:</label>
+                    <input readonly disabled type="number" id="shield" name="shield"/>
+                    <div class="inline collapse" id="guardianDiv">
+                        <label for="heal">Bonus shield with guardian:</label>
+                        <input readonly disabled type="text" id="bonusShield" name="bonusShield"/>
+                        <br>
+                    </div>
                 </div>
             </div>
 
