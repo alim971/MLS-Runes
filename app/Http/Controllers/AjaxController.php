@@ -28,32 +28,52 @@ class AjaxController extends Controller
         $mobility = \request()->get('mobility');
         $difficulty = \request()->get('difficulty');
         $time = \request()->get('time');
-        $minute = \request()->get('minute');
+        $minute = \request()->get('minute') ?? 0;
         $length = \request()->get('length');
         $number = \request()->get('number');
+        $reached = \request()->get('reached') ?? 0;
         $opponentTank = \request()->get('tankOpp');
         $opponentUtility = \request()->get('utiOpp');
         $opponentAfter = \request()->get('afOn') ? true : false;
+        $shutdowns = \request()->get('shutdown');
         $role = \request()->get('role');
 
         $dmg = 0;
         $heal = 0;
-
+        $shield = 0;
 
         $data = [];
 
+        if($rune == 'dh' && (($role == 'Mage' && $minute >= 9)
+            || ($role == 'Carry' && $reached > $minute))) {
+            $burstAll = $burst;
+            for ($i = 0; $i < $shutdowns; $i++) {
+                $burstAll *= 1.15;
+            }
+            $burstBonus = $burstAll - $burst;
+            $data += [
+                'bonusBurstMin' => round($burstBonus, 2),
+                'burstTotalMin' => round($burstAll, 2),
+                'min' => true
+            ];
+        }
         if($role == 'Mage') {
-            for($i = 5; $i < $minute; $i+=5) {
+            for($i = 5; $i <= $minute; $i+=5) {
                 $basic *= 1.15;
                 $burst *= 1.15;
             }
         } else if ($role == 'Carry') {
-
+            for($i = $reached; $i < $minute; $i++) {
+                $basic *= 1.17;
+                $burst *= 1.17;
+            }
         } else if($role == 'Marksman') {
-            for($i = 5; $i < $minute; $i+=5) {
+            for($i = 5; $i <= $minute; $i+=5) {
                 $basic *= 1.15;
                 $basic += 25;
             }
+        } else if($role == 'Enchanter') {
+            $shield = 10 * $minute;
         }
 
         if($rune == 'conq') {
@@ -118,15 +138,32 @@ class AjaxController extends Controller
             $data += [
                 'burst' => round($burstBonus, 2),
                 'negate' => round($negate,2),
+                'burstTotal' => $burst + $burstBonus,
             ];
         } else if($rune == 'dh') {
-
-        } else {
+            $burstAll = $burst;
+            for($i = 0; $i < $shutdowns; $i++) {
+                $burstAll *= 1.15;
+            }
+            $burstBonus = $burstAll - $burst;
+            $data += [
+                'bonusBurstMax' => round($burstBonus, 2),
+                'burstTotalMax' => round($burstAll,2),
+            ];
+        } else if($rune == 'gu') {
+            $bonusShield = $shield * 1.4;
+            $data += [
+                'bonusShield' => round($bonusShield, 2),
+                'totalShield' => round($shield + $bonusShield, 2),
+            ];
+        }
+        else {
             flash('Not recognized rune')->error();
         }
         $data += [
             'dmg' => round($dmg,2),
             'heal' => round($heal, 2),
+            'shield' => round($shield, 2),
         ];
         return Response::json($data);
 //        return $champion->toJson();
