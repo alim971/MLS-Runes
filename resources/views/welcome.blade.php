@@ -788,7 +788,9 @@
                 processData: false,
                 contentType: false
             }).success(function (data) {
-                $('#dmg').val(data['dmg'] + ' (Bonus ' + capitalFirst($('#runeSelect').val()) + ' dmg: ' + data['dmgRune'] + ')');
+                if(data['dmgRune'] >= 0) {
+                    $('#dmg').val(data['dmg'] + ' (Bonus ' + capitalFirst($('#runeSelect').val()) + ' dmg: ' + data['dmgRune'] + ')');
+                }
                 $('#heal').val(data['heal']);
                 $('#base').val(data['base']);
                 $('#fight').val(data['fight']);
@@ -801,8 +803,12 @@
                     $('#overcappedDiv').addClass('collapse');
                     $('#over').val(0);
                 }
-                $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
-                $('#bonusBur').val(data['burst'] + ' (' + data['burstTotal'] + ' total)');
+                if(data['bonus']) {
+                    $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
+                }
+                if(data['bonusBur']) {
+                    $('#bonusBur').val(data['burst'] + ' (' + data['burstTotal'] + ' total)');
+                }
                 $('#negate').val(data['negate']);
                 var bonus, total, bonusLabel, totalLabel;
                 if(data['min']) {
@@ -818,18 +824,23 @@
                 }
                 $('label[for=bonusBurDh]').html(bonusLabel);
                 $('label[for=totalBurDh]').html(totalLabel);
-                $('#bonusBurDh').val(bonus);
-                $('#totalBurDh').val(total);
+                if(data['bonusBurstDh']) {
+                    $('#bonusBurDh').val(bonus);
+                    $('#totalBurDh').val(total);
+                }
 
                 $('#bonusPoke').val(data['bonusPoke']);
                 $('#totalPoke').val(data['totalPoke']);
-                $('#bonusPokeAe').val(data['bonusPokeAe'] + ' (' + data['totalPokeAe'] + ' total)');
+                if(data['bonusPokeAe']) {
+                    $('#bonusPokeAe').val(data['bonusPokeAe'] + ' (' + data['totalPokeAe'] + ' total)');
+                }
                 $('#bonusDps').val(data['bonusDps']);
                 $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
 
-                $('#bonusMob').val(data['bonusMob'] + ' (' + data['totalMob'] + ' total)');
-                $('#bonusMobFig').val(data['bonusMobFig'] + ' (' + data['totalMobFig'] + ' total in fight)');
-
+                if(data['bonusMob']) {
+                    $('#bonusMob').val(data['bonusMob'] + ' (' + data['totalMob'] + ' total)');
+                    $('#bonusMobFig').val(data['bonusMobFig'] + ' (' + data['totalMobFig'] + ' total in fight)');
+                }
                 $('#totalUtil').val(data['totalUtil']);
                 if(data['overUtil']) {
                     $('#overUtilDiv').removeClass('collapse');
@@ -842,7 +853,9 @@
                 $('#bonusGold').val(data['bonusGold']);
 
                 $('#shield').val(data['shield']);
-                $('#bonusShield').val(data['bonusShield'] + ' (' + data['totalShield'] + ' total)');
+                if(data['bonusShield']) {
+                    $('#bonusShield').val(data['bonusShield'] + ' (' + data['totalShield'] + ' total)');
+                }
 
                 if($('#role').val() != "" && $('#role').val() != "Enchanter") {
                     $('#baScaled').val(data['baScaled']);
