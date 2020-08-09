@@ -42,7 +42,7 @@
         html, body:not(.white) {
             font-family: 'Nunito', sans-serif;
             font-weight: 200;
-            height: 100vh;
+            /*height: 100vh;*/
             margin: 0;
         }
 
@@ -116,10 +116,18 @@
             font-weight: 700;
         }
 
+        input[type=text] {
+            text-align: center;
+        }
+
         input[number] {
             margin-left: 10px;
             height: 40px;
             width: 40px;
+        }
+
+        #scaled input {
+            width: 22%;
         }
 
         label.white {
@@ -149,7 +157,9 @@
 
         input[type=range] {
             display: block;
-            width: 100%;
+            width: 94%;
+            /*margin-right: 10px;*/
+            margin-left: 20px;
         }
 
         .mode {
@@ -161,13 +171,39 @@
             display: inline;
         }
 
+        .inline-block {
+            display: inline-block;
+        }
+
         .inline-container {
             display: flex;
             justify-content: center;
         }
 
+        .scroll-container {
+            margin: auto;
+            max-height: 100%;
+            overflow: auto;
+        }
+
         .getBorder {
 
+        }
+
+        .result input {
+            width: 95%;
+
+            /*text-align: center;*/
+        }
+
+        .danger {
+            /*color: #fff;*/
+            color: #bd2130;
+            border-color: #b21f2d;
+        }
+
+        .danger-input {
+            background-color: #b21f2d;
         }
     </style>
     <script>
@@ -220,6 +256,18 @@
             f();
         });
 
+        $(document).on('input change', '#tank', function() {
+            var res = parseFloat($(this).val()) * 0.6;
+            res = +res.toFixed(2);
+            $('#resistance').val(res);
+        });
+
+        $(document).on('input change', '#tankOpp', function() {
+            var res = parseFloat($(this).val()) * 0.6;
+            res = +res.toFixed(2);
+            $('#resistanceOpp').val(res);
+        });
+
         $(document).on('click', '#dark', function() {
             var dark = $(".white").length <= 0;
             if(dark) {
@@ -263,7 +311,7 @@
                 $('#burst').val(data['burst']);
                 $('#poke').val(data['poke']);
                 $('#ba').val(data['basic']);
-                $('#tank').val(data['tank']);
+                $('#tank').val(data['tank']).trigger('change');
                 $('#sustain').val(data['sustain']);
                 $('#utility').val(data['utility']);
                 $('#mobility').val(data['mobility']);
@@ -299,6 +347,7 @@
                 $('#poke').val(0);
                 $('#ba').val(0);
                 $('#tank').val(0);
+                $('#resistance').val(0);
                 $('#sustain').val(0);
                 $('#utility').val(0);
                 $('#mobility').val(0);
@@ -335,8 +384,12 @@
                     id: $(this).val(),
                 }
             }).success(function (data) {
-                $('#tankOpp').val(data['tank']);
+                $('#tankOpp').val(data['tank']).trigger('change');
                 $('#utiOpp').val(data['utility']);
+                f();
+            }).error(function (data) {
+                $('#tankOpp').val(0).trigger('change');
+                $('#utiOpp').val(0);
                 f();
             });
             // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
@@ -354,6 +407,11 @@
                     collapseEle();
                     collapseDh();
                     collapseGu();
+                    collapseComet();
+                    collapseAery();
+                    collapseRush();
+                    collapseGl();
+                    collapseKlepto();
                     break;
                 case 'ff':
                     collapseDmg();
@@ -363,6 +421,11 @@
                     collapseEle();
                     collapseDh();
                     collapseGu();
+                    collapseComet();
+                    collapseAery();
+                    collapseRush();
+                    collapseGl();
+                    collapseKlepto();
                     break;
                 case 'lt':
                 case 'pta':
@@ -374,6 +437,11 @@
                     collapseEle();
                     collapseDh();
                     collapseGu();
+                    collapseComet();
+                    collapseAery();
+                    collapseRush();
+                    collapseGl();
+                    collapseKlepto();
                     break;
                 case 'ele':
                     collapseDmg();
@@ -383,6 +451,11 @@
                     uncollapseEle();
                     collapseDh();
                     collapseGu();
+                    collapseComet();
+                    collapseAery();
+                    collapseRush();
+                    collapseGl();
+                    collapseKlepto();
                     break;
                 case 'dh':
                     collapseDmg();
@@ -392,6 +465,11 @@
                     collapseEle();
                     uncollapseDh();
                     collapseGu();
+                    collapseComet();
+                    collapseAery();
+                    collapseRush();
+                    collapseGl();
+                    collapseKlepto();
                     break;
                 case 'af':
                     collapseDmg();
@@ -401,6 +479,11 @@
                     collapseEle();
                     collapseDh();
                     collapseGu();
+                    collapseComet();
+                    collapseAery();
+                    collapseRush();
+                    collapseGl();
+                    collapseKlepto();
                     break;
                 case 'gu':
                     collapseDmg();
@@ -410,6 +493,81 @@
                     collapseEle();
                     collapseDh();
                     uncollapseGu();
+                    collapseComet();
+                    collapseAery();
+                    collapseRush();
+                    collapseGl();
+                    collapseKlepto();
+                    break;
+                case 'comet':
+                    collapseDmg();
+                    collapseHeal();
+                    collapseFF();
+                    collapseAf();
+                    collapseEle();
+                    collapseDh();
+                    uncollapseGu();
+                    uncollapseComet();
+                    collapseAery();
+                    collapseRush();
+                    collapseGl();
+                    collapseKlepto();
+                    break;
+                case 'aery':
+                    collapseDmg();
+                    collapseHeal();
+                    collapseFF();
+                    collapseAf();
+                    collapseEle();
+                    collapseDh();
+                    uncollapseGu();
+                    collapseComet();
+                    uncollapseAery();
+                    collapseRush();
+                    collapseGl();
+                    collapseKlepto();
+                    break;
+                case 'rush':
+                    collapseDmg();
+                    collapseHeal();
+                    collapseFF();
+                    collapseAf();
+                    collapseEle();
+                    collapseDh();
+                    uncollapseGu();
+                    collapseComet();
+                    collapseAery();
+                    uncollapseRush();
+                    collapseGl();
+                    collapseKlepto();
+                    break;
+                case 'gl':
+                    collapseDmg();
+                    collapseHeal();
+                    collapseFF();
+                    collapseAf();
+                    collapseEle();
+                    collapseDh();
+                    uncollapseGu();
+                    collapseComet();
+                    collapseAery();
+                    collapseRush();
+                    uncollapseGl();
+                    collapseKlepto();
+                    break;
+                case 'klepto':
+                    uncollapseDmg();
+                    collapseHeal();
+                    collapseFF();
+                    collapseAf();
+                    collapseEle();
+                    collapseDh();
+                    collapseGu();
+                    collapseComet();
+                    collapseAery();
+                    collapseRush();
+                    collapseGl();
+                    uncollapseKlepto();
                     break;
                 default:
                     break;
@@ -528,12 +686,94 @@
         function uncollapseGu() {
             //$('#role').val() == "Enchanter"
             $('#guardianDiv').removeClass('collapse');
+
+        }
+
+        function collapseComet() {
+            if($('#cometDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#cometDiv').addClass('collapse');
+            $('#timeDiv').removeClass('collapse');
+            $('#bonusPoke').val(0);
+            $('#totalPoke').val(0);
+
+        }
+
+        function uncollapseComet() {
+            $('#cometDiv').removeClass('collapse');
+            $('#timeDiv').addClass('collapse');
+
+        }
+
+        function collapseAery() {
+            if($('#aeryDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#aeryDiv').addClass('collapse');
+            $('#bonusPokeAe').val(0);
+            $('#bonusDps').val(0);
+        }
+
+        function uncollapseAery() {
+            $('#aeryDiv').removeClass('collapse');
+        }
+
+        function collapseRush() {
+            if($('#rushDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#rushDiv').addClass('collapse');
+            $('#timeDiv').removeClass('collapse');
+            $('#bonusMob').val(0);
+            $('#bonusMobFig').val(0);
+        }
+
+        function uncollapseRush() {
+            $('#rushDiv').removeClass('collapse');
+            $('#timeDiv').addClass('collapse');
+
+        }
+
+        function collapseGl() {
+            if($('#glDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#glDiv').addClass('collapse');
+            $('#timeDiv').removeClass('collapse');
+            $('#totalUtil').val(0);
+        }
+
+        function uncollapseGl() {
+            $('#glDiv').removeClass('collapse');
+            $('#timeDiv').addClass('collapse');
+        }
+
+        function collapseKlepto() {
+            if($('#kleptoDiv').hasClass("collapse")) {
+                return;
+            }
+            $('#kleptoDiv').addClass('collapse');
+            $('#timeDiv').removeClass('collapse');
+            $('#bonusGold').val(0);
+        }
+
+        function uncollapseKlepto() {
+            $('#kleptoDiv').removeClass('collapse');
+            $('#timeDiv').addClass('collapse');
+        }
+
+        function capitalFirst(string)
+        {
+            if(string != null) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
         }
 
         function f() {
-            if($('#runeSelect').val() == null) {
-                return;
-            }
+            // if($('#runeSelect').val() == null) {
+            //     return;
+            // }
             var formData = new FormData(document.querySelector('form'));
 
             $.ajaxSetup({
@@ -549,12 +789,19 @@
                 processData: false,
                 contentType: false
             }).success(function (data) {
-                $('#dmg').val(data['dmg']);
+                $('#dmg').val(data['dmg'] + ' (Bonus ' + capitalFirst($('#runeSelect').val()) + ' dmg: ' + data['dmgRune'] + ')');
                 $('#heal').val(data['heal']);
                 $('#base').val(data['base']);
                 $('#fight').val(data['fight']);
-                $('#after').val(data['after']);
+                //$('#after').val(data['after']);
                 $('#afterAll').val(data['afterAll']);
+                if(data['overcapped']) {
+                    $('#overcappedDiv').removeClass('collapse');
+                    $('#over').val(data['over']);
+                } else if($('#overcappedDiv').hasClass('collapse')){
+                    $('#overcappedDiv').addClass('collapse');
+                    $('#over').val(0);
+                }
                 $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
                 $('#bonusBur').val(data['burst'] + ' (' + data['burstTotal'] + ' total)');
                 $('#negate').val(data['negate']);
@@ -575,9 +822,40 @@
                 $('#bonusBurDh').val(bonus);
                 $('#totalBurDh').val(total);
 
+                $('#bonusPoke').val(data['bonusPoke']);
+                $('#totalPoke').val(data['totalPoke']);
+                $('#bonusPokeAe').val(data['bonusPokeAe'] + ' (' + data['totalPokeAe'] + ' total)');
+                $('#bonusDps').val(data['bonusDps']);
+                $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
+
+                $('#bonusMob').val(data['bonusMob'] + ' (' + data['totalMob'] + ' total)');
+                $('#bonusMobFig').val(data['bonusMobFig'] + ' (' + data['totalMobFig'] + ' total in fight)');
+
+                $('#totalUtil').val(data['totalUtil']);
+                if(data['overUtil']) {
+                    $('#overUtilDiv').removeClass('collapse');
+                    $('#overUtil').val(data['overUtil']);
+                } else if($('#overUtilDiv').hasClass('collapse')){
+                    $('#overUtilDiv').addClass('collapse');
+                    $('#overUtil').val(0);
+                }
+
+                $('#bonusGold').val(data['bonusGold']);
+
                 $('#shield').val(data['shield']);
                 $('#bonusShield').val(data['bonusShield'] + ' (' + data['totalShield'] + ' total)');
 
+                if($('#role').val() != "" && $('#role').val() != "Enchanter") {
+                    $('#baScaled').val(data['baScaled']);
+                    $('#burstScaled').val(data['burstScaled']);
+                    $('#scaled').removeClass('collapse');
+                    $('#scaledLabel').removeClass('collapse');
+                } else if(!$('#scaled').hasClass('collapse')) {
+                    $('#scaled').addClass('collapse');
+                    $('#scaledLabel').addClass('collapse');
+                    $('#baScaled').val(0);
+                    $('#burstScaled').val(0);
+                }
 
 
             });
@@ -586,8 +864,7 @@
 </head>
 <body>
 <div class="flex-center position-ref full-height">
-
-    <div class="content bigger">
+    <div class="content bigger scroll-container">
         @include('flash::message')
 
         <div class="title m-b-md">
@@ -626,37 +903,62 @@
             </div>
         </div>
         <br>
-        <br>
-        <br>
         <div class="getBorder">
+            <label>Base stats:</label>
             <form method="post" action="{{ route('rune') }}" id="myForm">
-                <label for="burst">Role</label>
-                <input type="text" maxlength="10" name="role" id="role">
-                <label for="burst">Burst</label>
-                <input type="number" min="0" max="100" step="10" name="burst" value="0"  id="burst"/>
-
-                <label for="poke">Poke</label>
-                <input type="number" min="0" max="100" step="10" name="poke" value="0" id="poke"/>
-
-                <label for="ba">Basic attacks</label>
-                <input type="number" min="0" max="100" step="10" name="ba" value="0" id="ba"/>
-
-                <label for="tank">Tank</label>
-                <input type="number" min="0" max="100" step="10" name="tank" value="0" id="tank"/>
-
-                <label for="sustain">Sustain</label>
-                <input type="number" min="0" max="100" step="10" name="sustain" value="0" id="sustain"/>
-
-                <label for="utility">Utility</label>
-                <input type="number" min="0" max="100" step="10" name="utility" value="0" id="utility"/>
-
-                <label for="mobility">Mobility</label>
-                <input type="number" min="0" max="100" step="10" name="mobility" value="0" id="mobility"/>
-
-                <label for="difficulty">Difficulty</label>
-                <input type="number" min="0" max="100" step="10" name="difficulty" value="0" id="difficulty"/>
-
+                <div class="inline-block">
+                    <label for="role">Role</label>
+                    <input type="text" maxlength="10" name="role" id="role">
+                </div>
+                <div class="inline-block">
+                    <label for="burst">Burst</label>
+                    <input type="number" min="0" max="100" step="10" name="burst" value="0"  id="burst"/>
+                </div>
+                <div class="inline-block">
+                    <label for="poke">Poke</label>
+                    <input type="number" min="0" max="100" step="10" name="poke" value="0" id="poke"/>
+                </div>
+                <div class="inline-block">
+                    <label for="ba">Basic attacks</label>
+                    <input type="number" min="0" max="100" step="10" name="ba" value="0" id="ba"/>
+                </div>
+                <div class="inline-block">
+                    <label for="tank">Tank</label>
+                    <input type="number" min="0" max="100" step="10" name="tank" value="0" id="tank"/>
+                </div>
+                <div class="inline-block">
+                    <label for="resistance">Resistance</label>
+                    <input type="number" min="0" max="1000" disabled name="resistance" value="0" id="resistance"/>
+                </div>
+                <div class="inline-block">
+                    <label for="sustain">Sustain</label>
+                    <input type="number" min="0" max="100" step="10" name="sustain" value="0" id="sustain"/>
+                </div>
+                <div class="inline-block">
+                    <label for="utility">Utility</label>
+                    <input type="number" min="0" max="100" step="10" name="utility" value="0" id="utility"/>
+                </div>
+                <div class="inline-block">
+                    <label for="mobility">Mobility</label>
+                    <input type="number" min="0" max="100" step="10" name="mobility" value="0" id="mobility"/>
+                </div>
+                <div class="inline-block">
+                    <label for="difficulty">Difficulty</label>
+                    <input type="number" min="0" max="100" step="10" name="difficulty" value="0" id="difficulty"/>
+                </div>
                 <br>
+
+                <div class="inline-block">
+                <label class="collapse" id="scaledLabel">Scaled stats</label>
+                    <div class="collapse" id="scaled">
+                        <label for="burstScaled">Burst</label>
+                        <input type="text" disabled  id="burstScaled"/>
+
+                        <label for="baScaled">Basic attacks</label>
+                        <input type="text" value="0" id="baScaled"/>
+                    </div>
+                </div>
+
                 <br>
                 <br>
                 {{--                        <li>--}}
@@ -727,6 +1029,9 @@
                     <br>
                     <label for="tankOpp">Tank</label>
                     <input type="number" min="0" max="100" step="10" value="0" name="tankOpp" id="tankOpp"/>
+                    <label for="resistanceOpp">Resistance</label>
+                    <input type="number" min="0" max="1000" readonly name="resistanceOpp" value="0" id="resistanceOpp"/>
+
                     <label for="utiOpp">Utility</label>
                     <input type="number" min="0" max="100" step="10" value="0" name="utiOpp" id="utiOpp"/>
                     <br>
@@ -745,6 +1050,11 @@
                             <option value="lt">Lethal tempo</option>
                             <option value="pta">Press the attack</option>
                         </optgroup>
+                        <optgroup label="Sorcery">
+                            <option value="comet">Arcane Comet</option>
+                            <option value="aery">Summon Aery</option>
+                            <option value="rush">Phase Rush</option>
+                        </optgroup>
                         <optgroup label="Domination">
                             <option value="hob">Hail of Blades</option>
                             <option value="ele">Electrocute</option>
@@ -754,63 +1064,145 @@
                             <option value="af">Aftershock</option>
                             <option value="gu">Guardian (Enchanters only)</option>
                         </optgroup>
+                        <optgroup label="Inspiration">
+                            <option value="gl">Glacial Augment</option>
+                            <option value="klepto">Kleptomancy</option>
+                        </optgroup>
                     </select>
                 </div>
             </form>
             <br>
             <br>
         </div>
-            <div class="bigger3 getBorder">
-                <div class="inline-container">
+            <div class="bigger3">
+                <div class="inline-container result">
                     <div class="inline collapse" id="dmgDiv">
-                        <label for="dmg">Damage done:</label>
-                        <input readonly disabled type="number" id="dmg" name="dmg"/>
+                        <div class="inline-block">
+                            <label for="dmg">Damage done:</label>
+                            <input readonly disabled type="text" id="dmg" name="dmg"/>
+                        </div>
                         <br>
                     </div>
                     <div class="inline collapse" id="healDiv">
-                        <label for="heal">Healing done:</label>
-                        <input readonly disabled type="number" id="heal" name="heal"/>
+                        <div class="inline-block">
+                            <label for="heal">Healing done:</label>
+                            <input readonly disabled type="text" id="heal" name="heal"/>
+                        </div>
                         <br>
                     </div>
                 </div>
 
                 <div id="ffDiv" class="collapse">
-                    <label for="base">Healing done outside fight:</label>
-                    <input readonly disabled type="number" id="base" name="base"/>
-                    <label for="fight">Healing done during fight:</label>
-                    <input readonly disabled type="number" id="fight" name="fight"/>
+                    <div class="inline-block">
+                        <label for="base">Healing done outside fight:</label>
+                        <input readonly disabled type="text" id="base" name="base"/>
+                    </div>
+                    <div class="inline-block">
+                        <label for="fight">Healing done during fight:</label>
+                        <input readonly disabled type="text" id="fight" name="fight"/>
+                    </div>
                 </div>
                 <div class="collapse" id="afterDiv">
-                    <label for="bonus">Bonus Resistance at initiation:</label>
-                    <input readonly disabled type="text" id="bonus" name="bonus"/>
-                    <label for="afterAll">Total bonus resistance:</label>
-                    <input readonly disabled type="number" id="afterAll" name="afterAll"/>
-                    <div class="collapse" style="text-align: left; margin-left: 15px">
-                        <label for="after">Total Resistance at initiation:</label>
-                        <input readonly disabled type="number" id="after" name="after"/>
+                    <div class="inline-block">
+                        <label for="bonus">Bonus Resistance at initiation:</label>
+                        <input readonly disabled type="text" id="bonus" name="bonus"/>
+                    </div>
+                    <div class="inline-block">
+                        <label for="afterAll">Total bonus resistance:</label>
+                        <input readonly disabled type="text" id="afterAll" name="afterAll"/>
+                    </div>
+                    <div class="inline collapse danger" id="overcappedDiv">
+                        <div class="inline-block">
+                            <label for="over">Limit overcapped by:</label>
+                            <input class="danger-input" readonly disabled type="text" id="over" name="over"/>
+                        </div>
                     </div>
                 </div>
                 <div class="collapse" id="eleDiv">
-                    <label for="bonusBur">Bonus Burst at initiation:</label>
-                    <input readonly disabled type="text" id="bonusBur" name="bonusBur"/>
+                    <div class="inline-block">
+                        <label for="bonusBur">Bonus Burst at initiation:</label>
+                        <input readonly disabled type="text" id="bonusBur" name="bonusBur"/>
+                    </div>
                     <div id="negateDiv" style="display: inline">
-                        <label for="negate">Resistance negated:</label>
-                        <input readonly disabled type="number" id="negate" value="0" name="negate"/>
+                        <div class="inline-block">
+                            <label for="negate">Resistance negated:</label>
+                            <input readonly disabled type="text" id="negate" value="0" name="negate"/>
+                        </div>
                     </div>
                 </div>
                 <div class="collapse" id="dhDiv">
-                    <label for="bonusBurDh">Bonus Burst:</label>
-                    <input readonly disabled type="text" id="bonusBurDh" name="bonusBurDh"/>
-                    <label for="totalBurDh">Total burst:</label>
-                    <input readonly disabled type="text" id="totalBurDh" value="0" name="totalBurDh"/>
+                    <div class="inline-block">
+                        <label for="bonusBurDh">Bonus Burst:</label>
+                        <input readonly disabled type="text" id="bonusBurDh" name="bonusBurDh"/>
+                    </div>
+                    <div class="inline-block">
+                        <label for="totalBurDh">Total burst:</label>
+                        <input readonly disabled type="text" id="totalBurDh" value="0" name="totalBurDh"/>
+                    </div>
+                </div>
+                <div class="collapse" id="cometDiv">
+                    <div class="inline-block">
+                        <label for="bonusPoke">Bonus Poke:</label>
+                        <input readonly disabled type="text" id="bonusPoke" name="bonusPoke"/>
+                    </div>
+                    <div class="inline-block">
+                        <label for="totalPoke">Total Poke:</label>
+                        <input readonly disabled type="text" id="totalPoke" value="0" name="totalPoke"/>
+                    </div>
+                </div>
+                <div class="collapse result" id="aeryDiv">
+                    <div class="inline-block">
+                        <label for="bonusPokeAe">Bonus Poke:</label>
+                        <input readonly disabled type="text" id="bonusPokeAe" name="bonusPokeAe"/>
+                    </div>
+                    <div class="inline-block">
+                        <label for="bonusDps">Bonus to DPS:</label>
+                        <input readonly disabled type="text" id="bonusDps" value="0" name="bonusDps"/>
+                    </div>
+                    <div class="inline-block">
+                        <label for="dmgAery">Damage dealt:</label>
+                        <input readonly disabled type="text" id="dmgAery" value="0" name="dmgAery"/>
+                    </div>
+                </div>
+                <div class="collapse" id="rushDiv">
+                    <div class="inline-block">
+                        <label for="bonusMob">Bonus Mobility:</label>
+                        <input readonly disabled type="text" id="bonusMob" name="bonusMob"/>
+                    </div>
+                    <div class="inline-block">
+                        <label for="bonusMobFig">Bonus Mobility in fight:</label>
+                        <input readonly disabled type="text" id="bonusMobFig" value="0" name="bonusMobFig"/>
+                    </div>
+                </div>
+                <div class="collapse" id="glDiv">
+                    <div class="inline-block">
+                        <label for="totalUtil">Total Utility:</label>
+                        <input readonly disabled type="text" id="totalUtil" value="0" name="totalUtil"/>
+                    </div>
+                    <div class="inline collapse danger" id="overUtilDiv">
+                        <div class="inline-block">
+                            <label for="overUtil">Limit overcapped by:</label>
+                            <input class="danger-input" readonly disabled type="text" id="overUtil" name="overUtil"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapse" id="kleptoDiv">
+                    <div class="inline-block">
+                        <label for="bonusGold">Bonus gold per poke(max 100/min):</label>
+                        <input readonly disabled type="text" id="bonusGold" name="bonusGold"/>
+                    </div>
                 </div>
                 <div class="collapse" id="shieldDiv">
                     <br>
-                    <label for="dmg">Shield when ally is damaged:</label>
-                    <input readonly disabled type="number" id="shield" name="shield"/>
+                    <div class="inline-block">
+                        <label for="shield">Shield when ally is damaged:</label>
+                        <input readonly disabled type="text" id="shield" name="shield"/>
+                    </div>
                     <div class="inline collapse" id="guardianDiv">
-                        <label for="heal">Bonus shield with guardian:</label>
-                        <input readonly disabled type="text" id="bonusShield" name="bonusShield"/>
+                        <div class="inline-block">
+                            <label for="bonusShield">Bonus shield with guardian:</label>
+                            <input readonly disabled type="text" id="bonusShield" name="bonusShield"/>
+                        </div>
                         <br>
                     </div>
                 </div>
