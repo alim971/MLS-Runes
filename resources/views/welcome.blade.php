@@ -556,7 +556,7 @@
                     collapseKlepto();
                     break;
                 case 'klepto':
-                    uncollapseDmg();
+                    collapseDmg();
                     collapseHeal();
                     collapseFF();
                     collapseAf();
