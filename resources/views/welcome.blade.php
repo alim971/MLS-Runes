@@ -229,7 +229,7 @@
             }
         })
 
-        $(document).on('change mousemove', 'input[type=range]', function() {
+        $(document).on('change', 'input[type=range]', function() {
             // $(document).on('change', '#time', function() {
             var id = $(this).attr('id');
             var unit;
