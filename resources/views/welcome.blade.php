@@ -101,6 +101,7 @@
             margin-bottom: 30px;
         }
 
+
         select {
             height: 40px;
             width: 45%;
@@ -113,6 +114,7 @@
         }
 
         input, select {
+            border: black;
             font-weight: 700;
         }
 
