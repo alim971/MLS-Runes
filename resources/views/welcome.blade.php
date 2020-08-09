@@ -775,16 +775,16 @@
             // if($('#runeSelect').val() == null) {
             //     return;
             // }
-            // $('#dmg').val("");
-            // $('#bonus').val("");
-            // $('#bonusBur').val("");
-            // $('#bonusBurstDh').val("");
-            // $('#totalBurDh').val("");
-            // $('#bonusPokeAe').val("");
-            // $('#dmgAery').val("");
-            // $('#bonusMob').val("");
-            // $('#bonusMobFig').val("");
-            // $('#bonusShield').val("");
+            $('#dmg').val("");
+            $('#bonus').val("");
+            $('#bonusBur').val("");
+            $('#bonusBurstDh').val("");
+            $('#totalBurDh').val("");
+            $('#bonusPokeAe').val("");
+            $('#dmgAery').val("");
+            $('#bonusMob').val("");
+            $('#bonusMobFig').val("");
+            $('#bonusShield').val("");
             var formData = new FormData(document.querySelector('form'));
 
             $.ajaxSetup({
@@ -817,9 +817,13 @@
                 }
                 if(data['bonus']) {
                     $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
+                } else {
+                    $('#bonus').val("");
                 }
                 if(data['bonusBur']) {
                     $('#bonusBur').val(data['burst'] + ' (' + data['burstTotal'] + ' total)');
+                } else {
+                    $('#bonusBur').val("");
                 }
                 $('#negate').val(data['negate']);
                 var bonus, total, bonusLabel, totalLabel;
@@ -839,20 +843,30 @@
                 if(data['bonusBurstDh']) {
                     $('#bonusBurDh').val(bonus);
                     $('#totalBurDh').val(total);
+                } else {
+                    $('#bonusBurDh').val("");
+                    $('#totalBurDh').val("");
                 }
 
                 $('#bonusPoke').val(data['bonusPoke']);
                 $('#totalPoke').val(data['totalPoke']);
                 if(data['bonusPokeAe']) {
                     $('#bonusPokeAe').val(data['bonusPokeAe'] + ' (' + data['totalPokeAe'] + ' total)');
+                } else {
+                    $('#bonusPokeAe').val("");
                 }
                 $('#bonusDps').val(data['bonusDps']);
                 if(data['dmgAery']) {
                     $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
+                } else {
+                    $('#dmgAery').val("");
                 }
                 if(data['bonusMob']) {
                     $('#bonusMob').val(data['bonusMob'] + ' (' + data['totalMob'] + ' total)');
                     $('#bonusMobFig').val(data['bonusMobFig'] + ' (' + data['totalMobFig'] + ' total in fight)');
+                } else {
+                    $('#bonusMob').val("");
+                    $('#bonusMobFig').val("");
                 }
                 $('#totalUtil').val(data['totalUtil']);
                 if(data['overUtil']) {
@@ -868,6 +882,8 @@
                 $('#shield').val(data['shield']);
                 if(data['bonusShield']) {
                     $('#bonusShield').val(data['bonusShield'] + ' (' + data['totalShield'] + ' total)');
+                } else {
+                    $('#bonusShield').val("");
                 }
 
                 if($('#role').val() != "" && $('#role').val() != "Enchanter") {
