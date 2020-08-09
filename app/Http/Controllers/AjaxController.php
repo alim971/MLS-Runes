@@ -111,7 +111,7 @@ class AjaxController extends Controller
             for($i = 1; $i <= $length; $i++) {
                 $healBase += $i * 27;
             }
-            for($i = 0; $i < $time; $i += 4) {
+            for($i = 4; $i <= $time; $i += 4) {
                 $healFight +=  $minute * 27;
             }
             $heal = $healBase + $healFight;
