@@ -395,6 +395,7 @@
         });
 
         $(document).on('change', '#runeSelect', function() {
+            f();
             var rune = $(this).val();
 
             switch(rune) {
@@ -572,7 +573,6 @@
                     break;
                 // code block
             }
-            f();
             // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
         });
 
