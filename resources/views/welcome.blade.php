@@ -114,7 +114,7 @@
         }
 
         input, select {
-            border: black;
+            border-color: black;
             font-weight: 700;
         }
 
