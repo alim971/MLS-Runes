@@ -334,7 +334,6 @@
 
                 if($('#role').val() == "Enchanter"){
                     $('#shieldDiv').removeClass('collapse');
-                    $('#shieldDiv').val($('minute').val() * 10);
                 } else if($('#role').val() != "Enchanter") {
                     if(!$('#shieldDiv').hasClass('collapse'))
                         $('#shieldDiv').addClass('collapse');
