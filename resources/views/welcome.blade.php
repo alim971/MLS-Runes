@@ -773,6 +773,16 @@
             // if($('#runeSelect').val() == null) {
             //     return;
             // }
+            $('#dmg').val("");
+            $('#bonus').val("");
+            $('#bonusBur').val("");
+            $('#bonusBurstDh').val("");
+            $('#totalBurDh').val("");
+            $('#bonusPokeAe').val("");
+            $('#dmgAery').val("");
+            $('#bonusMob').val("");
+            $('#bonusMobFig').val("");
+            $('#bonusShield').val("");
             var formData = new FormData(document.querySelector('form'));
 
             $.ajaxSetup({
@@ -835,8 +845,9 @@
                     $('#bonusPokeAe').val(data['bonusPokeAe'] + ' (' + data['totalPokeAe'] + ' total)');
                 }
                 $('#bonusDps').val(data['bonusDps']);
-                $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
-
+                if(data['dmgAery']) {
+                    $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
+                }
                 if(data['bonusMob']) {
                     $('#bonusMob').val(data['bonusMob'] + ' (' + data['totalMob'] + ' total)');
                     $('#bonusMobFig').val(data['bonusMobFig'] + ' (' + data['totalMobFig'] + ' total in fight)');
