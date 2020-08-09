@@ -775,16 +775,16 @@
             // if($('#runeSelect').val() == null) {
             //     return;
             // }
-            $('#dmg').val("");
-            $('#bonus').val("");
-            $('#bonusBur').val("");
-            $('#bonusBurstDh').val("");
-            $('#totalBurDh').val("");
-            $('#bonusPokeAe').val("");
-            $('#dmgAery').val("");
-            $('#bonusMob').val("");
-            $('#bonusMobFig').val("");
-            $('#bonusShield').val("");
+            // $('#dmg').val("");
+            // $('#bonus').val("");
+            // $('#bonusBur').val("");
+            // $('#bonusBurstDh').val("");
+            // $('#totalBurDh').val("");
+            // $('#bonusPokeAe').val("");
+            // $('#dmgAery').val("");
+            // $('#bonusMob').val("");
+            // $('#bonusMobFig').val("");
+            // $('#bonusShield').val("");
             var formData = new FormData(document.querySelector('form'));
 
             $.ajaxSetup({
