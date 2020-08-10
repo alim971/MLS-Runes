@@ -245,7 +245,14 @@
                     unit = ' fight';
                     break;
                 case 'shutdown':
-                    unit = ' shutdown'
+                    unit = ' shutdown';
+                    break;
+                case 'level':
+                    unit = 'Level ';
+                    (this).next().html(unit +  $(this).val());
+                    f();
+                    return;
+
             }
             // var unit = id === 'time' ? ' second' : id === 'number' ? ' fight' : id ===  ' minute';
             unit += $(this).val() == 1 ? '' : 's';
@@ -875,17 +882,18 @@
                     $('#bonusShield').val("");
                 }
 
-                if($('#role').val() != "" && $('#role').val() != "Enchanter") {
+                // if($('#role').val() != "" && $('#role').val() != "Enchanter") {
                     $('#baScaled').val(data['baScaled']);
                     $('#burstScaled').val(data['burstScaled']);
-                    $('#scaled').removeClass('collapse');
-                    $('#scaledLabel').removeClass('collapse');
-                } else if(!$('#scaled').hasClass('collapse')) {
-                    $('#scaled').addClass('collapse');
-                    $('#scaledLabel').addClass('collapse');
-                    $('#baScaled').val(0);
-                    $('#burstScaled').val(0);
-                }
+                    $('#pokeScaled').val(data['burstScaled']);
+                    // $('#scaled').removeClass('collapse');
+                    // $('#scaledLabel').removeClass('collapse');
+                // } else if(!$('#scaled').hasClass('collapse')) {
+                //     $('#scaled').addClass('collapse');
+                //     $('#scaledLabel').addClass('collapse');
+                //     $('#baScaled').val(0);
+                //     $('#burstScaled').val(0);
+                // }
 
 
             });
@@ -1000,10 +1008,10 @@
 
                 <br>
 
-                <div class="bigger2 collapse" id="reachedDiv">
-                    <label for="reached">Minute when carry reached 9k gold (1 - 70)</label>
-                    <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="reached" id="reached"/>
-                    <span class="">1 minute</span>
+                <div class="bigger2 collapse" id="levelDiv">
+                    <label for="minute">Champion level (1 - 18)</label>
+                    <input class="changeInput" type="range" min="1" max="18" value="1" step="1" name="level" id="level"/>
+                    <span class="">Level 1</span>
                     <br>
                     <br>
 
@@ -1012,6 +1020,15 @@
                 <div class="bigger2 collapse" id="minuteDiv">
                     <label for="minute">Minute of the game (1 - 70)</label>
                     <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="minute" id="minute"/>
+                    <span class="">1 minute</span>
+                    <br>
+                    <br>
+
+                </div>
+
+                <div class="bigger2 collapse" id="reachedDiv">
+                    <label for="reached">Minute when carry reached 10k gold (1 - 70)</label>
+                    <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="reached" id="reached"/>
                     <span class="">1 minute</span>
                     <br>
                     <br>
@@ -1218,7 +1235,7 @@
                 </div>
                 <div class="collapse" id="kleptoDiv">
                     <div class="inline-block">
-                        <label for="bonusGold">Bonus gold per poke(max 100/min):</label>
+                        <label for="bonusGold">Bonus gold per poke(max 120/min):</label>
                         <input readonly disabled type="text" id="bonusGold" name="bonusGold"/>
                     </div>
                 </div>
