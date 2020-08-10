@@ -58,11 +58,17 @@ class AjaxController extends Controller
                 'min' => true
             ];
         }
-
+        $lvl = 1;
         if($role == 'Mage') {
             for($i = 5; $i <= $minute; $i+=5) {
                 $basic *= 1.15;
                 $burst *= 1.15;
+            }
+            for($i = 2; $i <= $minute && $lvl < $level; $i+=2) {
+                $basic += 10 + 0.1* $basic;
+                $burst += 10 + 0.1* $burst;
+                $poke +=  10 + 0.1* $poke;
+                $lvl++;
             }
         } else if ($role == 'Carry') {
             for($i = 2; $i <= $minute; $i++) {
@@ -73,10 +79,22 @@ class AjaxController extends Controller
                     $burst *= 1.17;
                 }
             }
+            for($i = 2; $i <= $minute && $lvl < $level; $i+=2) {
+                $basic += 10 + 0.1* $basic;
+                $burst += 10 + 0.1* $burst;
+                $poke +=  10 + 0.1* $poke;
+                $lvl++;
+            }
         } else if($role == 'Marksman') {
             for($i = 5; $i <= $minute; $i+=5) {
                 $basic *= 1.15;
                 $basic += 30;
+            }
+            for($i = 2; $i <= $minute && $lvl < $level; $i+=2) {
+                $basic += 10 + 0.1* $basic;
+                $burst += 10 + 0.1* $burst;
+                $poke +=  10 + 0.1* $poke;
+                $lvl++;
             }
         } else {
             if($role == 'Enchanter') {
@@ -84,11 +102,16 @@ class AjaxController extends Controller
             }
             for($i = 2; $i <= $level; $i++) {
                 $basic += 10 + 0.1* $basic;
-                $burst *= 10 + 0.1* $burst;
-                $poke *=  10 + 0.1* $poke;
+                $burst += 10 + 0.1* $burst;
+                $poke +=  10 + 0.1* $poke;
             }
         }
-
+        if($role != "" && $role != "Enchanter")
+        for(; $level != 1 && $lvl <= $level; $lvl++) {
+            $basic += 10 + 0.1* $basic;
+            $burst += 10 + 0.1* $burst;
+            $poke +=  10 + 0.1* $poke;
+        }
         if($rune == 'conq') {
             $increase = 0.1;
             $healing = 0.15;
@@ -110,7 +133,7 @@ class AjaxController extends Controller
         } else if($rune == 'pta') {
             $increase = 5 * $level;
             for($i = 0; $i < $time; $i++) {
-                $dmg += $basic + $increase * $basic;
+                $dmg += $basic + $increase;
 //                $increase += 0.06;
             }
         } else if($rune == 'hob') {
@@ -168,7 +191,7 @@ class AjaxController extends Controller
             $data += [
                 'burst' => round($burstBonus, 2),
                 'negate' => round($negate,2),
-                'burstTotal' => $burst + $burstBonus,
+                'burstTotal' => round($burst + $burstBonus,2),
             ];
         } else if($rune == 'dh') {
             $burstAll = $burst;
@@ -247,6 +270,7 @@ class AjaxController extends Controller
             'shield' => round($shield, 2),
             'burstScaled' => round($burst, 2),
             'baScaled' => round($basic, 2),
+            'pokeScaled' => round($poke, 2)
         ];
         return Response::json($data);
 //        return $champion->toJson();

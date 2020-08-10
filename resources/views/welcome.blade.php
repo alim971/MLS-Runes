@@ -228,7 +228,7 @@
             }
         })
 
-        $(document).on('change mousemove', 'input[type=range]', function() {
+        $(document).on('change', 'input[type=range]', function() {
             // $(document).on('change', '#time', function() {
             var id = $(this).attr('id');
             var unit;
@@ -249,7 +249,7 @@
                     break;
                 case 'level':
                     unit = 'Level ';
-                    (this).next().html(unit +  $(this).val());
+                    $(this).next().html(unit +  $(this).val());
                     f();
                     return;
 
@@ -366,6 +366,7 @@
                 if(!$('#reachedDiv').hasClass('collapse')) {
                     $('#reachedDiv').addClass('collapse');
                 }
+                f();
 
                 }
 
@@ -816,7 +817,7 @@
                 } else {
                     $('#bonus').val("");
                 }
-                if(data['bonusBur']) {
+                if(data['burst']) {
                     $('#bonusBur').val(data['burst'] + ' (' + data['burstTotal'] + ' total)');
                 } else {
                     $('#bonusBur').val("");
@@ -885,7 +886,7 @@
                 // if($('#role').val() != "" && $('#role').val() != "Enchanter") {
                     $('#baScaled').val(data['baScaled']);
                     $('#burstScaled').val(data['burstScaled']);
-                    $('#pokeScaled').val(data['burstScaled']);
+                    $('#pokeScaled').val(data['pokeScaled']);
                     // $('#scaled').removeClass('collapse');
                     // $('#scaledLabel').removeClass('collapse');
                 // } else if(!$('#scaled').hasClass('collapse')) {
@@ -946,7 +947,7 @@
             <form method="post" action="{{ route('rune') }}" id="myForm">
                 <div class="inline-block">
                     <label for="role">Role</label>
-                    <input type="text" maxlength="10" name="role" id="role">
+                    <input type="text" maxlength="10" readonly name="role" id="role">
                 </div>
                 <div class="inline-block">
                     <label for="burst">Burst</label>
@@ -987,13 +988,16 @@
                 <br>
 
                 <div class="inline-block">
-                <label class="collapse" id="scaledLabel">Scaled stats</label>
-                    <div class="collapse" id="scaled">
+                <label id="scaledLabel">Scaled stats</label>
+                    <div class="" id="scaled">
                         <label for="burstScaled">Burst</label>
-                        <input type="text" disabled  id="burstScaled"/>
+                        <input type="text" disabled  value="0" id="burstScaled"/>
 
                         <label for="baScaled">Basic attacks</label>
                         <input type="text" value="0" id="baScaled"/>
+
+                        <label for="pokeScaled">Poke</label>
+                        <input type="text" value="0" id="pokeScaled"/>
                     </div>
                 </div>
 
@@ -1008,7 +1012,7 @@
 
                 <br>
 
-                <div class="bigger2 collapse" id="levelDiv">
+                <div class="bigger2" id="levelDiv">
                     <label for="minute">Champion level (1 - 18)</label>
                     <input class="changeInput" type="range" min="1" max="18" value="1" step="1" name="level" id="level"/>
                     <span class="">Level 1</span>
