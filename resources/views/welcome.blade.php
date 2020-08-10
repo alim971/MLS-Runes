@@ -113,6 +113,7 @@
         }
 
         input, select {
+            border-color: black;
             font-weight: 700;
         }
 
@@ -312,9 +313,6 @@
                 $('#poke').val(data['poke']);
                 $('#ba').val(data['basic']);
                 $('#tank').val(data['tank']).trigger('change');
-                // var res = data['tank'] * 0.6;
-                // res = +res.toFixed(2);
-                // $('#resistance').val(res);
                 $('#sustain').val(data['sustain']);
                 $('#utility').val(data['utility']);
                 $('#mobility').val(data['mobility']);
@@ -398,6 +396,7 @@
         });
 
         $(document).on('change', '#runeSelect', function() {
+            f();
             var rune = $(this).val();
 
             switch(rune) {
@@ -558,7 +557,7 @@
                     collapseKlepto();
                     break;
                 case 'klepto':
-                    uncollapseDmg();
+                    collapseDmg();
                     collapseHeal();
                     collapseFF();
                     collapseAf();
@@ -575,7 +574,6 @@
                     break;
                 // code block
             }
-            f();
             // myDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
         });
 
@@ -791,7 +789,9 @@
                 processData: false,
                 contentType: false
             }).success(function (data) {
-                $('#dmg').val(data['dmg'] + ' (Bonus ' + capitalFirst($('#runeSelect').val()) + ' dmg: ' + data['dmgRune'] + ')');
+                if(data['dmgRune'] >= 0) {
+                    $('#dmg').val(data['dmg'] + ' (Bonus ' + capitalFirst($('#runeSelect').val()) + ' dmg: ' + data['dmgRune'] + ')');
+                }
                 $('#heal').val(data['heal']);
                 $('#base').val(data['base']);
                 $('#fight').val(data['fight']);
@@ -804,8 +804,16 @@
                     $('#overcappedDiv').addClass('collapse');
                     $('#over').val(0);
                 }
-                $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
-                $('#bonusBur').val(data['burst'] + ' (' + data['burstTotal'] + ' total)');
+                if(data['bonus']) {
+                    $('#bonus').val(data['bonus'] + ' (' + data['after'] + ' total)');
+                } else {
+                    $('#bonus').val("");
+                }
+                if(data['bonusBur']) {
+                    $('#bonusBur').val(data['burst'] + ' (' + data['burstTotal'] + ' total)');
+                } else {
+                    $('#bonusBur').val("");
+                }
                 $('#negate').val(data['negate']);
                 var bonus, total, bonusLabel, totalLabel;
                 if(data['min']) {
@@ -821,18 +829,34 @@
                 }
                 $('label[for=bonusBurDh]').html(bonusLabel);
                 $('label[for=totalBurDh]').html(totalLabel);
-                $('#bonusBurDh').val(bonus);
-                $('#totalBurDh').val(total);
+                if(data['bonusBurstDh']) {
+                    $('#bonusBurDh').val(bonus);
+                    $('#totalBurDh').val(total);
+                } else {
+                    $('#bonusBurDh').val("");
+                    $('#totalBurDh').val("");
+                }
 
                 $('#bonusPoke').val(data['bonusPoke']);
                 $('#totalPoke').val(data['totalPoke']);
-                $('#bonusPokeAe').val(data['bonusPokeAe'] + ' (' + data['totalPokeAe'] + ' total)');
+                if(data['bonusPokeAe']) {
+                    $('#bonusPokeAe').val(data['bonusPokeAe'] + ' (' + data['totalPokeAe'] + ' total)');
+                } else {
+                    $('#bonusPokeAe').val("");
+                }
                 $('#bonusDps').val(data['bonusDps']);
-                $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
-
-                $('#bonusMob').val(data['bonusMob'] + ' (' + data['totalMob'] + ' total)');
-                $('#bonusMobFig').val(data['bonusMobFig'] + ' (' + data['totalMobFig'] + ' total in fight)');
-
+                if(data['dmgAery']) {
+                    $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
+                } else {
+                    $('#dmgAery').val("");
+                }
+                if(data['bonusMob']) {
+                    $('#bonusMob').val(data['bonusMob'] + ' (' + data['totalMob'] + ' total)');
+                    $('#bonusMobFig').val(data['bonusMobFig'] + ' (' + data['totalMobFig'] + ' total in fight)');
+                } else {
+                    $('#bonusMob').val("");
+                    $('#bonusMobFig').val("");
+                }
                 $('#totalUtil').val(data['totalUtil']);
                 if(data['overUtil']) {
                     $('#overUtilDiv').removeClass('collapse');
@@ -845,7 +869,11 @@
                 $('#bonusGold').val(data['bonusGold']);
 
                 $('#shield').val(data['shield']);
-                $('#bonusShield').val(data['bonusShield'] + ' (' + data['totalShield'] + ' total)');
+                if(data['bonusShield']) {
+                    $('#bonusShield').val(data['bonusShield'] + ' (' + data['totalShield'] + ' total)');
+                } else {
+                    $('#bonusShield').val("");
+                }
 
                 if($('#role').val() != "" && $('#role').val() != "Enchanter") {
                     $('#baScaled').val(data['baScaled']);
@@ -866,7 +894,7 @@
 </head>
 <body>
 <div class="flex-center position-ref full-height">
-    <div class="content bigger scroll-container" style="overflow: auto ">
+    <div class="content bigger scroll-container">
         @include('flash::message')
 
         <div class="title m-b-md">
@@ -881,8 +909,6 @@
                 <option value="Custom">Custom</option>
                 @foreach($champions as $champion)
                     <option value="{{ $champion->id }}">{{ $champion->name }}</option>
-{{--                    <option value="{{ $champion->id }}">{{ $champion->role == null ? $champion->name--}}
-{{--                                                            : $champion->name . ' - ' . $champion->role  }}</option>--}}
                 @endforeach
             </select>
 

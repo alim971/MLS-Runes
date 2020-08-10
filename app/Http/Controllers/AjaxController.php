@@ -17,37 +17,6 @@ class AjaxController extends Controller
 //        return $champion->toJson();
     }
 
-    public function getScaledStatsForChampion() {
-        $role = \request()->get('role');
-        $burst = \request()->get('burst');
-        $basic = \request()->get('ba');
-        $minute = \request()->get('minute');
-        $reached = \request()->get('reached');
-        if($role == 'Mage') {
-            for($i = 5; $i <= $minute; $i+=5) {
-                $basic *= 1.15;
-                $burst *= 1.15;
-            }
-        } else if ($role == 'Carry') {
-            for($i = $reached; $i < $minute; $i++) {
-                $basic *= 1.17;
-                $burst *= 1.17;
-            }
-        } else if($role == 'Marksman') {
-            for($i = 5; $i <= $minute; $i+=5) {
-                $basic *= 1.15;
-                $basic += 25;
-            }
-        }
-
-        $data = [
-            'burstScale' => $burst,
-            'baScale' => $basic,
-        ];
-        return Response::json($data);
-//        return $champion->toJson();
-    }
-
     public function getStatsForRune() {
         $rune = \request()->get('rune');
         $burst = \request()->get('burst');
