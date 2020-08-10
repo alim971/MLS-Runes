@@ -101,7 +101,6 @@
             margin-bottom: 30px;
         }
 
-
         select {
             height: 40px;
             width: 45%;
@@ -229,7 +228,7 @@
             }
         })
 
-        $(document).on('change mousemove', 'input[type=range]', function() {
+        $(document).on('change', 'input[type=range]', function() {
             // $(document).on('change', '#time', function() {
             var id = $(this).attr('id');
             var unit;
@@ -246,7 +245,14 @@
                     unit = ' fight';
                     break;
                 case 'shutdown':
-                    unit = ' shutdown'
+                    unit = ' shutdown';
+                    break;
+                case 'level':
+                    unit = 'Level ';
+                    $(this).next().html(unit +  $(this).val());
+                    f();
+                    return;
+
             }
             // var unit = id === 'time' ? ' second' : id === 'number' ? ' fight' : id ===  ' minute';
             unit += $(this).val() == 1 ? '' : 's';
@@ -360,6 +366,7 @@
                 if(!$('#reachedDiv').hasClass('collapse')) {
                     $('#reachedDiv').addClass('collapse');
                 }
+                f();
 
                 }
 
@@ -775,16 +782,6 @@
             // if($('#runeSelect').val() == null) {
             //     return;
             // }
-            // $('#dmg').val("");
-            // $('#bonus').val("");
-            // $('#bonusBur').val("");
-            // $('#bonusBurstDh').val("");
-            // $('#totalBurDh').val("");
-            // $('#bonusPokeAe').val("");
-            // $('#dmgAery').val("");
-            // $('#bonusMob').val("");
-            // $('#bonusMobFig').val("");
-            // $('#bonusShield').val("");
             var formData = new FormData(document.querySelector('form'));
 
             $.ajaxSetup({
@@ -820,7 +817,7 @@
                 } else {
                     $('#bonus').val("");
                 }
-                if(data['bonusBur']) {
+                if(data['burst']) {
                     $('#bonusBur').val(data['burst'] + ' (' + data['burstTotal'] + ' total)');
                 } else {
                     $('#bonusBur').val("");
@@ -886,17 +883,18 @@
                     $('#bonusShield').val("");
                 }
 
-                if($('#role').val() != "" && $('#role').val() != "Enchanter") {
+                // if($('#role').val() != "" && $('#role').val() != "Enchanter") {
                     $('#baScaled').val(data['baScaled']);
                     $('#burstScaled').val(data['burstScaled']);
-                    $('#scaled').removeClass('collapse');
-                    $('#scaledLabel').removeClass('collapse');
-                } else if(!$('#scaled').hasClass('collapse')) {
-                    $('#scaled').addClass('collapse');
-                    $('#scaledLabel').addClass('collapse');
-                    $('#baScaled').val(0);
-                    $('#burstScaled').val(0);
-                }
+                    $('#pokeScaled').val(data['pokeScaled']);
+                    // $('#scaled').removeClass('collapse');
+                    // $('#scaledLabel').removeClass('collapse');
+                // } else if(!$('#scaled').hasClass('collapse')) {
+                //     $('#scaled').addClass('collapse');
+                //     $('#scaledLabel').addClass('collapse');
+                //     $('#baScaled').val(0);
+                //     $('#burstScaled').val(0);
+                // }
 
 
             });
@@ -949,7 +947,7 @@
             <form method="post" action="{{ route('rune') }}" id="myForm">
                 <div class="inline-block">
                     <label for="role">Role</label>
-                    <input type="text" maxlength="10" name="role" id="role">
+                    <input type="text" maxlength="10" readonly name="role" id="role">
                 </div>
                 <div class="inline-block">
                     <label for="burst">Burst</label>
@@ -990,13 +988,16 @@
                 <br>
 
                 <div class="inline-block">
-                <label class="collapse" id="scaledLabel">Scaled stats</label>
-                    <div class="collapse" id="scaled">
+                <label id="scaledLabel">Scaled stats</label>
+                    <div class="" id="scaled">
                         <label for="burstScaled">Burst</label>
-                        <input type="text" disabled  id="burstScaled"/>
+                        <input type="text" disabled  value="0" id="burstScaled"/>
 
                         <label for="baScaled">Basic attacks</label>
                         <input type="text" value="0" id="baScaled"/>
+
+                        <label for="pokeScaled">Poke</label>
+                        <input type="text" value="0" id="pokeScaled"/>
                     </div>
                 </div>
 
@@ -1011,10 +1012,10 @@
 
                 <br>
 
-                <div class="bigger2 collapse" id="reachedDiv">
-                    <label for="reached">Minute when carry reached 9k gold (1 - 70)</label>
-                    <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="reached" id="reached"/>
-                    <span class="">1 minute</span>
+                <div class="bigger2" id="levelDiv">
+                    <label for="minute">Champion level (1 - 18)</label>
+                    <input class="changeInput" type="range" min="1" max="18" value="1" step="1" name="level" id="level"/>
+                    <span class="">Level 1</span>
                     <br>
                     <br>
 
@@ -1023,6 +1024,15 @@
                 <div class="bigger2 collapse" id="minuteDiv">
                     <label for="minute">Minute of the game (1 - 70)</label>
                     <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="minute" id="minute"/>
+                    <span class="">1 minute</span>
+                    <br>
+                    <br>
+
+                </div>
+
+                <div class="bigger2 collapse" id="reachedDiv">
+                    <label for="reached">Minute when carry reached 10k gold (1 - 70)</label>
+                    <input class="changeInput" type="range" min="1" max="70" value="1" step="1" name="reached" id="reached"/>
                     <span class="">1 minute</span>
                     <br>
                     <br>
@@ -1229,7 +1239,7 @@
                 </div>
                 <div class="collapse" id="kleptoDiv">
                     <div class="inline-block">
-                        <label for="bonusGold">Bonus gold per poke(max 100/min):</label>
+                        <label for="bonusGold">Bonus gold per poke(max 120/min):</label>
                         <input readonly disabled type="text" id="bonusGold" name="bonusGold"/>
                     </div>
                 </div>
