@@ -106,11 +106,13 @@ class AjaxController extends Controller
                 $poke +=  10 + 0.1* $poke;
             }
         }
-        if($role != "" && $role != "Enchanter")
-        for(; $level != 1 && $lvl <= $level; $lvl++) {
-            $basic += 10 + 0.1* $basic;
-            $burst += 10 + 0.1* $burst;
-            $poke +=  10 + 0.1* $poke;
+        if($role != "" && $role != "Enchanter") {
+            $lvl = max(2, $lvl);
+            for(; $lvl <= $level; $lvl++) {
+                $basic += 10 + 0.1 * $basic;
+                $burst += 10 + 0.1 * $burst;
+                $poke += 10 + 0.1 * $poke;
+            }
         }
         if($rune == 'conq') {
             $increase = 0.1;
