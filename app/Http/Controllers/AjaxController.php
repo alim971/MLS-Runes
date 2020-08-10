@@ -186,7 +186,7 @@ class AjaxController extends Controller
         } else if($rune == 'ele') {
             $burstBonus = $burst * 0.75 + (20*$minute);
             if($opponentAfter) {
-                $opponentTank = min(85, $tank * (1 +  (min($utility, 70) / 100)));
+                $opponentTank = min(85, $opponentTank * (1 +  (min($utility, 70) / 100)));
             }
                 //$opponentTank * ($opponentAfter ? (min($opponentUtility, 70)/100) : 0);
             $negate = $opponentTank * 0.1;
