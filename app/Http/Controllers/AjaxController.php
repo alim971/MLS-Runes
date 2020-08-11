@@ -136,7 +136,7 @@ class AjaxController extends Controller
             $increase = 5 * $level;
             for($i = 0; $i < $time; $i++) {
                 $dmg += $basic + $increase;
-//                $increase += 0.06;
+                $increase += 5 * $level;
             }
         } else if($rune == 'hob') {
             $increase = 0.25;

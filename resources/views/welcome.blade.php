@@ -228,7 +228,7 @@
             }
         })
 
-        $(document).on('change', 'input[type=range]', function() {
+        $(document).on('change input', 'input[type=range]', function() {
             // $(document).on('change', '#time', function() {
             var id = $(this).attr('id');
             var unit;
@@ -258,36 +258,6 @@
             unit += $(this).val() == 1 ? '' : 's';
             $(this).next().html($(this).val() + unit);
             f();
-        });
-
-        $(document).on('mouseover', 'input[type=range]', function() {
-            // $(document).on('change', '#time', function() {
-            var id = $(this).attr('id');
-            var unit;
-            switch (id) {
-                case 'time':
-                    unit = ' second';
-                    break;
-                case 'length':
-                case 'minute':
-                case 'reached':
-                    unit = ' minute';
-                    break;
-                case 'number':
-                    unit = ' fight';
-                    break;
-                case 'shutdown':
-                    unit = ' shutdown';
-                    break;
-                case 'level':
-                    unit = 'Level ';
-                    $(this).next().html(unit +  $(this).val());
-                    return;
-
-            }
-            // var unit = id === 'time' ? ' second' : id === 'number' ? ' fight' : id ===  ' minute';
-            unit += $(this).val() == 1 ? '' : 's';
-            $(this).next().html($(this).val() + unit);
         });
 
         $(document).on('input', 'input[type=number]', function() {
@@ -1127,9 +1097,9 @@
                         <option disabled selected value> -- select a rune -- </option>
                         <optgroup label="Precision">
                             <option value="conq">Conqueror</option>
-                            <option value="ff">Fleet Footwork</option>
                             <option value="lt">Lethal tempo</option>
                             <option value="pta">Press the attack</option>
+                            <option value="ff">Fleet Footwork</option>
                         </optgroup>
                         <optgroup label="Sorcery">
                             <option value="comet">Arcane Comet</option>
