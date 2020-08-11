@@ -808,7 +808,7 @@
                 if(data['overcapped']) {
                     $('#overcappedDiv').removeClass('collapse');
                     $('#over').val(data['over']);
-                } else if($('#overcappedDiv').hasClass('collapse')){
+                } else if(!$('#overcappedDiv').hasClass('collapse')){
                     $('#overcappedDiv').addClass('collapse');
                     $('#over').val(0);
                 }
@@ -869,7 +869,7 @@
                 if(data['overUtil']) {
                     $('#overUtilDiv').removeClass('collapse');
                     $('#overUtil').val(data['overUtil']);
-                } else if($('#overUtilDiv').hasClass('collapse')){
+                } else if(!$('#overUtilDiv').hasClass('collapse')){
                     $('#overUtilDiv').addClass('collapse');
                     $('#overUtil').val(0);
                 }
