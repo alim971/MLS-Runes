@@ -260,6 +260,36 @@
             f();
         });
 
+        $(document).on('mouseover', 'input[type=range]', function() {
+            // $(document).on('change', '#time', function() {
+            var id = $(this).attr('id');
+            var unit;
+            switch (id) {
+                case 'time':
+                    unit = ' second';
+                    break;
+                case 'length':
+                case 'minute':
+                case 'reached':
+                    unit = ' minute';
+                    break;
+                case 'number':
+                    unit = ' fight';
+                    break;
+                case 'shutdown':
+                    unit = ' shutdown';
+                    break;
+                case 'level':
+                    unit = 'Level ';
+                    $(this).next().html(unit +  $(this).val());
+                    return;
+
+            }
+            // var unit = id === 'time' ? ' second' : id === 'number' ? ' fight' : id ===  ' minute';
+            unit += $(this).val() == 1 ? '' : 's';
+            $(this).next().html($(this).val() + unit);
+        });
+
         $(document).on('input', 'input[type=number]', function() {
             f();
         });
