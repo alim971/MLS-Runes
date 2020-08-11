@@ -106,11 +106,13 @@ class AjaxController extends Controller
                 $poke +=  10 + 0.1* $poke;
             }
         }
-        if($role != "" && $role != "Enchanter")
-        for(; $level != 1 && $lvl <= $level; $lvl++) {
-            $basic += 10 + 0.1* $basic;
-            $burst += 10 + 0.1* $burst;
-            $poke +=  10 + 0.1* $poke;
+        if($role != "" && $role != "Enchanter") {
+            $lvl = max(2, $lvl);
+            for(; $lvl <= $level; $lvl++) {
+                $basic += 10 + 0.1 * $basic;
+                $burst += 10 + 0.1 * $burst;
+                $poke += 10 + 0.1 * $poke;
+            }
         }
         if($rune == 'conq') {
             $increase = 0.1;
@@ -134,7 +136,7 @@ class AjaxController extends Controller
             $increase = 5 * $level;
             for($i = 0; $i < $time; $i++) {
                 $dmg += $basic + $increase;
-//                $increase += 0.06;
+                $increase += 5 * $level;
             }
         } else if($rune == 'hob') {
             $increase = 0.25;
@@ -184,7 +186,7 @@ class AjaxController extends Controller
         } else if($rune == 'ele') {
             $burstBonus = $burst * 0.75 + (20*$minute);
             if($opponentAfter) {
-                $opponentTank = min(85, $tank * (1 +  (min($utility, 70) / 100)));
+                $opponentTank = min(85, $opponentTank * (1 +  (min($opponentUtility, 70) / 100)));
             }
                 //$opponentTank * ($opponentAfter ? (min($opponentUtility, 70)/100) : 0);
             $negate = $opponentTank * 0.1;

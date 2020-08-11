@@ -228,7 +228,7 @@
             }
         })
 
-        $(document).on('change', 'input[type=range]', function() {
+        $(document).on('change input', 'input[type=range]', function() {
             // $(document).on('change', '#time', function() {
             var id = $(this).attr('id');
             var unit;
@@ -1097,9 +1097,9 @@
                         <option disabled selected value> -- select a rune -- </option>
                         <optgroup label="Precision">
                             <option value="conq">Conqueror</option>
-                            <option value="ff">Fleet Footwork</option>
                             <option value="lt">Lethal tempo</option>
                             <option value="pta">Press the attack</option>
+                            <option value="ff">Fleet Footwork</option>
                         </optgroup>
                         <optgroup label="Sorcery">
                             <option value="comet">Arcane Comet</option>
