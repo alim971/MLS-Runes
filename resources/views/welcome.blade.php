@@ -637,7 +637,7 @@
             $('#afterDiv').addClass('collapse');
             $('#numberDiv').addClass('collapse');
             $('#timeDiv').removeClass('collapse');
-            $('#number').val('1 fight');
+            $('#number').val('1 fight').trigger('change');
         }
 
         function uncollapseAf() {
@@ -853,10 +853,10 @@
                     $('#bonusPokeAe').val("");
                 }
                 $('#bonusDps').val(data['bonusDps']);
-                if(data['dmgAery']) {
-                    $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
+                if(data['dmgRune']) {
+                    $('#dmg').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
                 } else {
-                    $('#dmgAery').val("");
+                    $('#dmg').val("");
                 }
                 if(data['bonusMob']) {
                     $('#bonusMob').val(data['bonusMob'] + ' (' + data['totalMob'] + ' total)');
