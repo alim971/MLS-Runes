@@ -854,9 +854,9 @@
                 }
                 $('#bonusDps').val(data['bonusDps']);
                 if(data['dmgRune']) {
-                    $('#dmg').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
+                    $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
                 } else {
-                    $('#dmg').val("");
+                    $('#dmgAery').val("");
                 }
                 if(data['bonusMob']) {
                     $('#bonusMob').val(data['bonusMob'] + ' (' + data['totalMob'] + ' total)');
