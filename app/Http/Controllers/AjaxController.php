@@ -222,7 +222,7 @@ class AjaxController extends Controller
             $increase = 0.25 * ($poke + $bonusPoke);
 //            $dmgAery = 0;
             for($i = 0; $i < $time; $i++) {
-                $dmg += $basic + $increase * $basic;
+                $dmg += $basic + $increase;
             }
             $data += [
                 'bonusPokeAe' => round($bonusPoke, 2),

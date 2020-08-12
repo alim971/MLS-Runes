@@ -853,7 +853,7 @@
                     $('#bonusPokeAe').val("");
                 }
                 $('#bonusDps').val(data['bonusDps']);
-                if(data['dmgAery']) {
+                if(data['dmg']) {
                     $('#dmgAery').val(data['dmg'] + '( Aery dmg: ' + data['dmgRune'] + ')');
                 } else {
                     $('#dmgAery').val("");
