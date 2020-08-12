@@ -158,7 +158,7 @@ class AjaxController extends Controller
                 'fight' => $healFight,
             ];
         } else if($rune == 'af') {
-            $resist = $tank * (min($utility, 70)/100);
+            $resist = min($utility, 70);
 //            $resist = min($tank * 1.85, $tank * (min($utility, 70)/100));
             $cap = 85;
             $all = $tank + $resist;
@@ -186,7 +186,7 @@ class AjaxController extends Controller
         } else if($rune == 'ele') {
             $burstBonus = $burst * 0.75 + (20*$minute);
             if($opponentAfter) {
-                $opponentTank = min(85, $opponentTank * (1 +  (min($opponentUtility, 70) / 100)));
+                $opponentTank = min(85, $opponentTank + (min($opponentUtility, 70)));
             }
                 //$opponentTank * ($opponentAfter ? (min($opponentUtility, 70)/100) : 0);
             $negate = $opponentTank * 0.1;

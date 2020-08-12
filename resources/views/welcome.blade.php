@@ -265,13 +265,13 @@
         });
 
         $(document).on('input change', '#tank', function() {
-            var res = parseFloat($(this).val()) * 0.6;
+            var res = parseFloat($(this).val()) * 0.4;
             res = +res.toFixed(2);
             $('#resistance').val(res);
         });
 
         $(document).on('input change', '#tankOpp', function() {
-            var res = parseFloat($(this).val()) * 0.6;
+            var res = parseFloat($(this).val()) * 0.4;
             res = +res.toFixed(2);
             $('#resistanceOpp').val(res);
         });
